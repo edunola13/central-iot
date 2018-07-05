@@ -22,7 +22,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'w*^7b_!d96sp==0&f8dpv6af2!x#%3h9f6tkym3t&1g7orpu6o'
+#SECRET_KEY = 'w*^7b_!d96sp==0&f8dpv6af2!x#%3h9f6tkym3t&1g7orpu6o'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -79,13 +79,14 @@ WSGI_APPLICATION = 'RobotApiRest.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
-
+"""
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
+"""
 
 
 # Password validation
@@ -139,7 +140,7 @@ REST_FRAMEWORK = {
     #En general a nosotros nos conviene usar unicamente JSONWebTokenAuthentication pero para las pruebas dejo todas
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
-        #'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
         #'rest_framework.authentication.BasicAuthentication',
     ),
 
@@ -165,3 +166,6 @@ JWT_AUTH = {
 }
 
 SECRET_KEY = APP_KEY
+
+#Incorporo las configuraciones locales - Las que hay que modificar por ambiente
+from .local_settings import *
