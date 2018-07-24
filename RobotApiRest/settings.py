@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'adminSite.apps.AdminsiteConfig',
     'devices.apps.DevicesConfig',
     'sensors.apps.SensorsConfig',
+    'ir.apps.IrConfig',
 ]
 
 MIDDLEWARE = [

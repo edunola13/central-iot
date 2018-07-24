@@ -22,6 +22,7 @@ urlpatterns = [
     url(r'^', include('users.urls')),
     url(r'^', include('devices.urls')),
     url(r'^', include('sensors.urls')),
+    url(r'^', include('ir.urls')),
     path('admin/', admin.site.urls),
     #url(r'^api-auth/', include('rest_framework.urls'))
     url(r'^api-token-auth/', obtain_jwt_token),

@@ -6,9 +6,11 @@ from django.db import models
 class Device(models.Model):
     TYPE_SENSOR = 'SENSOR'
     TYPE_ACTUATOR = 'ACTUATOR'
+    TYPE_IR = 'IR'
     DEVICE_TYPES = (
         (TYPE_SENSOR, 'Dispositivo de Sensores'),
-        (TYPE_ACTUATOR, 'Dispositivo de Actuadores Simples')
+        (TYPE_ACTUATOR, 'Dispositivo de Actuadores Simples'),
+        (TYPE_IR, 'Dispositivo de Control Infrarojo (Envio y Recibo)')
     )
 
     code = models.CharField(max_length=20, unique=True)
