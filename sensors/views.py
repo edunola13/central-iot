@@ -9,13 +9,12 @@ from rest_framework.permissions import IsAuthenticated
 
 from sensors.models import Sensor, SensorReading
 from sensors.serializers import SensorSerializer, SensorDetailSerializer, SensorReadingSerializer, SensorReadingDetailSerializer
-from RobotApiRest.permissions import AutomatizadorOrReadOnly
 
 
 class SensorViewSet(viewsets.ModelViewSet):
     queryset = Sensor.objects.all()
     serializer_class = SensorSerializer
-    permission_classes = (IsAuthenticated, AutomatizadorOrReadOnly, )
+    # permission_classes = (IsAuthenticated, AutomatizadorOrReadOnly, )
     #Este va cuando es distinto al definido en la configuracion
     #filter_backends = (filters.DjangoFilterBackend, SearchFilter, OrderingFilter)
     __basic_fields = ('code', 'sensorType')
@@ -43,4 +42,4 @@ class SensorViewSet(viewsets.ModelViewSet):
 class SensorReadingRead(viewsets.ReadOnlyModelViewSet):
     queryset = SensorReading.objects.all()
     serializer_class = SensorReadingDetailSerializer
-    permission_classes = (IsAuthenticated, AutomatizadorOrReadOnly, )
+    # permission_classes = (IsAuthenticated, AutomatizadorOrReadOnly, )

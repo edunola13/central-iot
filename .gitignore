@@ -9,5 +9,5 @@ env
 !.gitignore
 !.travis.yml
 
-/RobotApiRest/secrets.py
-/RobotApiRest/local_settings.py
+/server/secrets.py
+/server/local_settings.py

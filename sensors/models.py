@@ -11,7 +11,7 @@ class Sensor(models.Model):
 
     code = models.CharField(max_length=20, unique=True)
     name = models.CharField(max_length=100, blank=True, default='')
-    sensorType = models.CharField(choices=SENSOR_TYPES, max_length=10)    
+    sensorType = models.CharField(choices=SENSOR_TYPES, max_length=10)
     lastRead = models.TextField(max_length=500, null=True)
     lastUpdate = models.DateTimeField(null=True)
     created = models.DateTimeField(auto_now_add=True)
@@ -25,7 +25,7 @@ class Sensor(models.Model):
         ordering = ('name',)
 
 
-class SensorReading(models.Model):   
+class SensorReading(models.Model):
     read = models.TextField(max_length=500)
     created = models.DateTimeField(auto_now_add=True)
 

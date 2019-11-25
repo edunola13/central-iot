@@ -1,25 +1,24 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-from rest_framework import status, viewsets
+
+from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from django_filters import rest_framework as filters
-from rest_framework.permissions import IsAuthenticated
 
-from ir.models import IrControl, IrAction
-from ir.serializers import IrControlSerializer, IrActionSerializer
-from ir.permissions import ControlPermissions, ActionPermissions
+from apps.ir.models import IrControl, IrAction
+from apps.ir.serializers import IrControlSerializer, IrActionSerializer
 
 
 class IrControlViewSet(viewsets.ModelViewSet):
     queryset = IrControl.objects.all()
     serializer_class = IrControlSerializer
-    permission_classes = (IsAuthenticated, ControlPermissions)
-    
+    # permission_classes = (IsAuthenticated, ControlPermissions)
+
     __basic_fields = ('name', )
-    #En caso de no incluir estos campos no se aceptan filtros y/o no se aceptan busquedas
     filter_fields = __basic_fields
     search_fields = __basic_fields
+    ordering_fields = __basic_fields + ('created_at',)
+    ordering = 'name'
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
@@ -34,9 +33,10 @@ class IrControlViewSet(viewsets.ModelViewSet):
 class IrActionViewSet(viewsets.ModelViewSet):
     queryset = IrAction.objects.all()
     serializer_class = IrActionSerializer
-    permission_classes = (IsAuthenticated, ActionPermissions) 
+    # permission_classes = (IsAuthenticated, ActionPermissions)
 
-    __basic_fields = ('name', 'control', 'decodeType')
-    #En caso de no incluir estos campos no se aceptan filtros y/o no se aceptan busquedas
+    __basic_fields = ('name', 'control', 'decode_type')
     filter_fields = __basic_fields
     search_fields = __basic_fields
+    ordering_fields = __basic_fields + ('created_at',)
+    ordering = 'name'

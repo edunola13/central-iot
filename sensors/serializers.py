@@ -3,8 +3,8 @@ from __future__ import unicode_literals
 from rest_framework import serializers
 
 from sensors.models import Sensor, SensorReading
-from devices.models import Device
-from devices.serializers import DeviceSerializer
+from apps.devices.models import Device
+from apps.devices.serializers import DeviceSerializer
 
 
 class SensorSerializer(serializers.ModelSerializer):

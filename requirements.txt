@@ -1,16 +1,26 @@
 #Django y Django Rest
 Django>=2.0.6
-djangorestframework>=3.7.7
-djangorestframework-jwt>=1.11.0
-#Requerida por djangorestframework-jwt. La trae sin declararla aca pero esta bueno saber que la usa
-PyJWT>=1.6.4
-
 django-filter>=1.1.0
+djangorestframework>=3.7.7
+#djangorestframework-jwt>=1.11.0
+#Requerida por djangorestframework-jwt. La trae sin declararla aca pero esta bueno saber que la usa
+#PyJWT>=1.6.4
+djangorestframework-simplejwt>=4.3.0
 
-#Pygments==2.2.0
-#Markdown==2.6.10
-#coreapi==2.3.3
-#psycopg2==2.7.3.2
-#dj-database-url==0.4.2
-#gunicorn==19.7.1
-#whitenoise==3.3.1
+django-cors-headers>=2.4.0
+
+drf-yasg>=1.13.0
+
+psycopg2
+psycopg2-binary==2.7.5
+
+celery>=4.1.1
+redis>=3.3.7
+# redlock-py>=1.0.8 -> No la usamos mas
+# redlock>=1.2.0 -> Esta es mejor, por si la requerimos
+
+gunicorn
+
+factory_boy
+mock
+coverage
