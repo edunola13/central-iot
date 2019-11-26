@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
+import json
 
 from django.db import models
 
@@ -20,7 +21,10 @@ class Device(models.Model):
         max_length=10,
         choices=DEVICE_STATUS_CHOICES,
         default=DEVICE_STATUS_INI)
+    access_key = models.CharField(max_length=40, null=True)
+    status_data = models.TextField(max_length=500)
     last_connection = models.DateTimeField(null=True)
+    record_history = models.BooleanField(default=False)
     enabled = models.BooleanField(default=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
@@ -31,3 +35,9 @@ class Device(models.Model):
 
     class Meta:
         ordering = ('name',)
+
+    def get_status_data(self):
+        try:
+            return json.loads(self.status_data)
+        except Exception:
+            return None

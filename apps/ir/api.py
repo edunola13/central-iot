@@ -4,15 +4,19 @@ from __future__ import unicode_literals
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
+
+from apps.utils.permissions import SafeMethodOrIsStaff
 
 from apps.ir.models import IrControl, IrAction
 from apps.ir.serializers import IrControlSerializer, IrActionSerializer
 
 
 class IrControlViewSet(viewsets.ModelViewSet):
+    permission_classes = (SafeMethodOrIsStaff,)
+
     queryset = IrControl.objects.all()
     serializer_class = IrControlSerializer
-    # permission_classes = (IsAuthenticated, ControlPermissions)
 
     __basic_fields = ('name', )
     filter_fields = __basic_fields
@@ -31,12 +35,20 @@ class IrControlViewSet(viewsets.ModelViewSet):
 
 
 class IrActionViewSet(viewsets.ModelViewSet):
+    permission_classes = (SafeMethodOrIsStaff,)
+
     queryset = IrAction.objects.all()
     serializer_class = IrActionSerializer
-    # permission_classes = (IsAuthenticated, ActionPermissions)
 
     __basic_fields = ('name', 'control', 'decode_type')
     filter_fields = __basic_fields
     search_fields = __basic_fields
     ordering_fields = __basic_fields + ('created_at',)
     ordering = 'name'
+
+    @action(methods=['post'], detail=True, permission_classes=(IsAuthenticated,))
+    def execute(self, request, pk=None):
+        # Ejecutar codigo sobre device X
+
+        serializer = IrActionSerializer()
+        return Response(serializer.data)

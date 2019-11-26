@@ -47,8 +47,9 @@ INSTALLED_APPS = [
 
     'apps.users',
     'apps.devices',
+    'apps.components',
     'apps.ir',
-    'sensors',
+    'apps.data_history',
 ]
 
 MIDDLEWARE = [
@@ -92,7 +93,6 @@ DATABASES = {
     }
 }
 """
-
 
 # Password validation
 # https://docs.djangoproject.com/en/2.0/ref/settings/#auth-password-validators
