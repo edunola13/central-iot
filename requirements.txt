@@ -19,6 +19,8 @@ redis>=3.3.7
 # redlock-py>=1.0.8 -> No la usamos mas
 # redlock>=1.2.0 -> Esta es mejor, por si la requerimos
 
+paho-mqtt
+
 gunicorn
 
 factory_boy
