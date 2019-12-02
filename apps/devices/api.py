@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+from django.http import Http404
 from rest_framework import status, mixins
 from rest_framework.viewsets import GenericViewSet
 from rest_framework.decorators import action
@@ -30,32 +31,35 @@ class DeviceViewSet(mixins.RetrieveModelMixin,
     ordering_fields = __basic_fields + ('created_at',)
     ordering = 'name'
 
-    @action(methods=['post'], detail=False)
+    @action(methods=['post'], detail=False, permission_classes=(IsAuthenticated,))
     def search_device(self, request, pk=None):
-        # DATA = {'device_type': 'X'}
+        data = request.data
 
-        # SEARCH IN ALL IPs
-        # CREATE DEVICE AND COMPONENTS
+        device = Device.add_device_from_network(request.META['REMOTE_ADDR'], data.get('device_type'))
+        if device is None:
+            raise Http404
 
-        serializer = DeviceSerializer()
+        serializer = DeviceSerializer(device)
 
         return Response(serializer.data,
                         status=status.HTTP_200_OK)
 
     @action(methods=['put'], detail=True, permission_classes=(IsAuthenticated,))
     def refresh_status(self, request, pk=None):
-        # Refresca el estado pidiendolo
+        instance = self.get_object()
+        instance.refresh_status_data()
 
-        serializer = DeviceSerializer()
+        serializer = DeviceSerializer(instance)
 
         return Response(serializer.data,
                         status=status.HTTP_200_OK)
 
     @action(methods=['put'], detail=True, permission_classes=(IsAuthenticated,))
     def refresh_components(self, request, pk=None):
-        # Refresca los componentes pidiendolo
+        instance = self.get_object()
+        instance.refresh_components()
 
-        serializer = DeviceSerializer()
+        serializer = DeviceSerializer(instance)
 
         return Response(serializer.data,
                         status=status.HTTP_200_OK)

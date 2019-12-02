@@ -3,14 +3,14 @@ TYPE_SENSOR = 'SENSOR'
 TYPE_ACTUATOR = 'ACTUATOR'
 TYPE_STATION = 'STATION'
 TYPE_IR = 'IR'
-TYPE_ALARM = 'ALARM'
+TYPE_ALARM = 'ES_AL_1'
 
 DEVICE_TYPES = (
     (TYPE_SENSOR, 'Dispositivo de Sensores'),
     (TYPE_ACTUATOR, 'Dispositivo de Actuadores Simples'),
     (TYPE_STATION, 'Disposivo de estacion de sensores y actuadores'),
     (TYPE_IR, 'Dispositivo de Control Infrarojo (Envio y Recibo)'),
-    (TYPE_ALARM, 'Dispositivo alarma')
+    (TYPE_ALARM, 'Dispositivo Alarma ESP')
 )
 
 DEVICE_STATUS_INI = 'INI'

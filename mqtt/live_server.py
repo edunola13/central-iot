@@ -18,7 +18,7 @@ def on_connect(client, userdata, flags, rc):
     # client.subscribe("$SYS/#") -> Este subscribe me hace escuchar cosas de sistema
     # Realizar las subscripciones aca por si se desconecta
     client.subscribe("PROD/#")
-    client.subscribe("casa/#")
+    client.subscribe("domo/#")
 
 
 # The callback for when a PUBLISH message is received from the server.

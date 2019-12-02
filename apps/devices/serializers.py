@@ -15,7 +15,7 @@ class DeviceSerializer(serializers.ModelSerializer):
                   'address', 'status', 'status_data', 'last_connection', 'enabled',
                   'created_at', 'updated_at')
         read_only_fields = (
-            'id', 'device_type', 'status', 'status_data', 'device_id',
+            'id', 'device_type', 'version', 'status', 'status_data', 'device_id',
             'last_connection', 'created_at', 'updated_at')
 
     def get_status_data(self, obj):

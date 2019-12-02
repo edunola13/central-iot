@@ -42,11 +42,11 @@ schema_view = get_schema_view(
 )
 
 urlpatterns = [
-    url(r'^', include('apps.users.urls')),
-    url(r'^', include('apps.devices.urls')),
-    url(r'^', include('apps.components.urls')),
-    url(r'^', include('apps.ir.urls')),
-    url(r'^', include('apps.data_history.urls')),
+    url(r'^api/', include('apps.users.urls')),
+    url(r'^api/', include('apps.devices.urls')),
+    url(r'^api/', include('apps.components.urls')),
+    url(r'^api/', include('apps.ir.urls')),
+    url(r'^api/', include('apps.data_history.urls')),
 
     url(r'^api/token/$', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     url(r'^api/token/refresh/$', TokenRefreshView.as_view(), name='token_refresh'),

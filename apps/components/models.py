@@ -5,7 +5,8 @@ import json
 from django.db import models
 
 from apps.components.constants import (
-    COMPONENT_TYPES, SENSOR_TYPES, ACTUATOR_TYPES, CONTROLLER_TYPES
+    COMPONENT_TYPES, TYPE_SENSOR, TYPE_ACTUATOR, TYPE_CONTROLLER,
+    SENSOR_TYPES, ACTUATOR_TYPES, CONTROLLER_TYPES
 )
 
 
@@ -30,6 +31,21 @@ class Component(models.Model):
         ordering = ('name',)
         abstract = True
 
+    def update_component(self, data):
+        if data.get('start', False):
+            self.enabled = True
+            self.set_status_data(data)
+        else:
+            self.enabled = False
+        self.save()
+
+    def set_status_data(self, data):
+        try:
+            self.status_data = json.dumps(data)
+            self.save()
+        except Exception:
+            return None
+
     def get_status_data(self):
         try:
             return json.loads(self.status_data)
@@ -40,10 +56,60 @@ class Component(models.Model):
 class Sensor(Component):
     sensor_type = models.CharField(choices=SENSOR_TYPES, max_length=10)
 
+    @classmethod
+    def create(cls, name, external_id, sensor_type, all_data, device):
+        sensor = Sensor.objects.create(
+            name=name,
+            component_type=TYPE_SENSOR,
+            sensor_type=sensor_type,
+            external_id=external_id,
+            device=device,
+            enabled=all_data.get('start', False)
+        )
+
+        if sensor.enabled:
+            sensor.set_status_data(all_data)
+
+        return sensor
+
 
 class Actuator(Component):
     actuator_type = models.CharField(choices=ACTUATOR_TYPES, max_length=10)
 
+    @classmethod
+    def create(cls, name, external_id, actuator_type, all_data, device):
+        actuator = Actuator.objects.create(
+            name=name,
+            component_type=TYPE_ACTUATOR,
+            actuator_type=actuator_type,
+            external_id=external_id,
+            status_data=json.dumps(all_data),
+            device=device,
+            enabled=all_data.get('start', False)
+        )
+
+        if actuator.enabled:
+            actuator.set_status_data(all_data)
+
+        return actuator
+
 
 class Controller(Component):
     controller_type = models.CharField(choices=CONTROLLER_TYPES, max_length=10)
+
+    @classmethod
+    def create(cls, name, external_id, controller_type, all_data, device):
+        controller = Controller.objects.create(
+            name=name,
+            component_type=TYPE_CONTROLLER,
+            controller_type=controller_type,
+            external_id=external_id,
+            status_data=json.dumps(all_data),
+            device=device,
+            enabled=all_data.get('start', False)
+        )
+
+        if controller.enabled:
+            controller.set_status_data(all_data)
+
+        return controller

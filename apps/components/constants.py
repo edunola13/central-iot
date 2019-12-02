@@ -16,6 +16,12 @@ SENSOR_TYPES = (
     (SENSOR_TYPE_IR, 'Sensor Infrarojo'),
 )
 
+NUMBER_TO_SENSOR_TYPE = {
+    0: 'NONE',
+    1: SENSOR_TYPE_DOOR,
+    2: SENSOR_TYPE_IR
+}
+
 ACTUATOR_TYPE_HORN = 'Bocina'
 ACTUATOR_TYPES = (
     (ACTUATOR_TYPE_HORN, 'Bocina'),
