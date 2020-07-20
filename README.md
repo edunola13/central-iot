@@ -6,6 +6,8 @@ Only run in Linuxs
 
 `redis`
 
+`mosquito (MQTT)`
+
 # MQTT
 Por un lado tiene que estar levantado el servicio de Mosquitto y por otro tenemos que lanzar el script:
 `(env) python -m mqtt.live_server`

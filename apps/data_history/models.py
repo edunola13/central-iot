@@ -15,6 +15,15 @@ class DataHistory(models.Model):
     object_id = models.PositiveIntegerField(null=True)
     object_related = GenericForeignKey('content_type', 'object_id')
 
+    @classmethod
+    def create(cls, status_data, related_to):
+        ct = ContentType.objects.get_for_model(related_to)
+        DataHistory.objects.create(
+            status_data=status_data,
+            content_type=ct,
+            object_id=related_to.id
+        )
+
     def get_status_data(self):
         try:
             return json.loads(self.status_data)

@@ -10,6 +10,7 @@ from apps.devices.constants import *
 from apps.components.constants import NUMBER_TO_SENSOR_TYPE
 
 from apps.components.models import Sensor
+from apps.data_history.models import DataHistory
 
 from apps.devices.clients import CLIENT_OF_DEVICE
 from apps.devices.clients.generic_client import GenericDeviceClient
@@ -89,6 +90,15 @@ class Device(models.Model):
         except Exception:
             return None
 
+    def new_status_data(self, status_data):
+        self.status_data = json.dumps(status_data)
+        self.save()
+
+        DataHistory.create(
+            status_data=self.status_data,
+            related_to=self
+        )
+
     def _get_strategy(self):
         if not self._strategy:
             self._strategy = STRATEGY_OF_DEVICE[self.device_type](self)
@@ -103,6 +113,9 @@ class Device(models.Model):
 
     def refresh_components(self):
         self._get_strategy().refresh_components()
+
+    def attend_event(self, topic, payload):
+        self._get_strategy().attend_event(topic, payload)
 
 
 class DeviceStrategy():
@@ -121,6 +134,9 @@ class DeviceStrategy():
         raise NotImplementedError
 
     def refresh_components(self):
+        raise NotImplementedError
+
+    def attend_event(self, topic, payload):
         raise NotImplementedError
 
 
@@ -164,6 +180,11 @@ class AlarmEspStrategy(DeviceStrategy):
                     sensor,
                     self.device
                 )
+
+    def attend_event(self, topic, payload):
+        topic = topic.split('/')
+        if len(topic) == 4 and topic[2] == 'alarm':
+            self.device.new_status_data(payload)
 
 
 STRATEGY_OF_DEVICE = {

@@ -9,7 +9,9 @@ from apps.data_history.models import DataHistory
 
 class DataHistoryFilter(rest_framework.FilterSet):
     content_type_name = filters.ChoiceFilter(method='filter_by_content_type', choices=[
-        ('sensor', 'Sensor'), ('actuator', 'Actuador'), ('controller', 'Controlador')])
+        ('device', 'Dispositivo'), ('sensor', 'Sensor'), ('actuator', 'Actuador'),
+        ('controller', 'Controlador')
+    ])
 
     def filter_by_content_type(self, queryset, key, value, *args, **kwargs):
         ct = ContentType.objects.get(model=value)
