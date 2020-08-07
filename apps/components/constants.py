@@ -1,33 +1,34 @@
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
 
+from django.utils.translation import ugettext_lazy as _
+
+
+# Types refer to general behaviors, not specific devices
+TYPE_OTHER = 'OTHER'
 TYPE_SENSOR = 'SENSOR'
-TYPE_ACTUATOR = 'ACTUATOR'
-TYPE_CONTROLLER = 'CONTROL'
+TYPE_ON_OFF = 'ON_OFF'
 
-COMPONENT_TYPES = (
-    (TYPE_SENSOR, 'Sensor'),
-    (TYPE_ACTUATOR, 'Actuador'),
-    (TYPE_CONTROLLER, 'Controlador'),
+COMPONENT_TYPE_CHOICES = (
+    (TYPE_OTHER, _('Otro Componente / Comportamiento')),
+    (TYPE_SENSOR, _('Estado Sensor')),
+    (TYPE_ON_OFF, _('Prender / Apagar')),
 )
 
-SENSOR_TYPE_DOOR = 'DOOR'
-SENSOR_TYPE_IR = 'IR'
-SENSOR_TYPES = (
-    (SENSOR_TYPE_DOOR, 'Sensor de Puerta'),
-    (SENSOR_TYPE_IR, 'Sensor Infrarojo'),
+EVENT_STATE_TYPE_REPORT = 'REPORT'  # Reporte de estado constante
+EVENT_STATE_TYPE_NOTIFY = 'NOTIFY'  # Cambio de un estado
+EVENT_STATE_TYPE_ALERT = 'ALERT'  # Cambio de un estado importante
+
+EVENT_STATE_TYPE_CHOICES = (
+    (EVENT_STATE_TYPE_REPORT, _('Reporte')),
+    (EVENT_STATE_TYPE_NOTIFY, _('Notificacion')),
+    (EVENT_STATE_TYPE_ALERT, _('Alerta')),
 )
 
-NUMBER_TO_SENSOR_TYPE = {
-    0: 'NONE',
-    1: SENSOR_TYPE_DOOR,
-    2: SENSOR_TYPE_IR
-}
+EVENT_ACTION_TYPE_USER = 'USER'
+EVENT_ACTION_TYPE_RULE = 'RULE'
 
-ACTUATOR_TYPE_HORN = 'Bocina'
-ACTUATOR_TYPES = (
-    (ACTUATOR_TYPE_HORN, 'Bocina'),
-)
-
-CONTROLLER_TYPE_SIMPLE = 'SIMPLE'
-CONTROLLER_TYPES = (
-    (CONTROLLER_TYPE_SIMPLE, 'Controlador Simple'),
+EVENT_STATE_TYPE_CHOICES = (
+    (EVENT_ACTION_TYPE_USER, _('usuario')),
+    (EVENT_ACTION_TYPE_RULE, _('Regla')),
 )

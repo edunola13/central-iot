@@ -1,25 +1,27 @@
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
 
+from django.utils.translation import ugettext_lazy as _
+
+
+# Types refer to general behaviors, not specific devices
+TYPE_OTHER = 'OTHER'
 TYPE_SENSOR = 'SENSOR'
 TYPE_ACTUATOR = 'ACTUATOR'
-TYPE_STATION = 'STATION'
-TYPE_IR = 'IR'
-TYPE_ALARM = 'ES_AL_1'
 
-DEVICE_TYPES = (
-    (TYPE_SENSOR, 'Dispositivo de Sensores'),
-    (TYPE_ACTUATOR, 'Dispositivo de Actuadores Simples'),
-    (TYPE_STATION, 'Disposivo de estacion de sensores y actuadores'),
-    (TYPE_IR, 'Dispositivo de Control Infrarojo (Envio y Recibo)'),
-    (TYPE_ALARM, 'Dispositivo Alarma ESP')
+DEVICE_TYPE_CHOICES = (
+    (TYPE_OTHER, _('Otro Dispositivo')),
+    (TYPE_SENSOR, _('Dispositivo de Sensores')),
+    (TYPE_ACTUATOR, _('Dispositivo de Actuadores')),
 )
 
-DEVICE_STATUS_INI = 'INI'
-DEVICE_STATUS_ERR = 'ERR'
-DEVICE_STATUS_CON = 'CON'
-DEVICE_STATUS_NO_CON = 'NO_CON'
+STATUS_INITIAL = 'INI'
+STATUS_OK = 'OK'
+STATUS_ERROR = 'ERROR'
+STATUS_DISCONNECT = 'DISCO'
 DEVICE_STATUS_CHOICES = (
-    (DEVICE_STATUS_INI, 'Inicial'),
-    (DEVICE_STATUS_ERR, 'Error'),
-    (DEVICE_STATUS_CON, 'Conectado'),
-    (DEVICE_STATUS_NO_CON, 'Desconectado'),
+    (STATUS_INITIAL, _('Configurando')),
+    (STATUS_OK, _('Correcto')),
+    (STATUS_ERROR, _('Error')),
+    (STATUS_DISCONNECT, _('Desconectado')),
 )

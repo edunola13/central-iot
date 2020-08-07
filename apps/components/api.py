@@ -1,159 +1,96 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from rest_framework import status
-from rest_framework.decorators import action
-from rest_framework.response import Response
-from rest_framework.viewsets import ReadOnlyModelViewSet
-from rest_framework.permissions import IsAuthenticated
+from django.http import Http404
 
-from apps.utils.permissions import SafeMethodOrIsStaff
+from rest_framework.viewsets import ReadOnlyModelViewSet, GenericViewSet
 
-from apps.components.models import Sensor, Actuator, Controller
+from django_module_common.utils.pagination import MongoPagination
+
+from .models import Component
+from .models_md import EventState, EventAction
 
 from apps.components.serializers import (
-    SensorSerializer, SensorUpdateSerializer,
-    ActuatorSerializer, ActuatorUpdateSerializer,
-    ControllerSerializer, ControllerUpdateSerializer
+    ComponentSerializer,
+    EventStateSerializer, EventActionSerializer
 )
 
+from .filters import EventStateFilter, EventActionFilter
 
-class SensorViewSet(ReadOnlyModelViewSet):
-    permission_classes = (SafeMethodOrIsStaff,)
 
-    queryset = Sensor.objects.all()
-    serializer_class = SensorSerializer
+class ComponentViewSet(ReadOnlyModelViewSet):
+    queryset = Component.objects.all().select_related("metadata").prefetch_related('tags')
+    serializer_class = ComponentSerializer
 
-    __basic_fields = ('name',)
-    filter_fields = __basic_fields + (
-        'component_type', 'sensor_type', 'record_history', 'enabled', 'device'
-    )
-    search_fields = __basic_fields
-    ordering_fields = __basic_fields + ('created_at', 'updated_at')
+    filter_fields = ('external_id', 'type', 'enabled', 'tags', 'device')
+    search_fields = ('name',)
+    ordering_fields = ('name', 'created_at')
     ordering = 'name'
 
-    def perform_update(self, serializer):
-        serializer.save()
+    def get_queryset(self):
+        if getattr(self, 'swagger_fake_view', False):
+            # queryset just for schema generation metadata
+            return Component.objects.all()
 
-    def partial_update(self, request, *args, **kwargs):
-        kwargs['partial'] = True
-        return self.update(request, *args, **kwargs)
-
-    def update(self, request, *args, **kwargs):
-        partial = kwargs.pop('partial', False)
-        instance = self.get_object()
-        serializer = SensorUpdateSerializer(instance, data=request.data, partial=partial)
-        serializer.is_valid(raise_exception=True)
-        self.perform_update(serializer)
-
-        if getattr(instance, '_prefetched_objects_cache', None):
-            # If 'prefetch_related' has been applied to a queryset, we need to
-            # forcibly invalidate the prefetch cache on the instance.
-            instance._prefetched_objects_cache = {}
-
-        serializer = self.get_serializer(instance)
-
-        return Response(serializer.data)
-
-    @action(methods=['put'], detail=True, permission_classes=(IsAuthenticated,))
-    def refresh(self, request, pk=None):
-        # Refresca el componente pidiendolo
-
-        serializer = SensorSerializer()
-
-        return Response(serializer.data,
-                        status=status.HTTP_200_OK)
+        return Component.objects.filter(
+            device__location__users__user=self.request.user,
+            device__location__users__enabled=True
+        )
 
 
-class ActuatorViewSet(ReadOnlyModelViewSet):
-    # permission_classes = (IsAdminUser,)
+class EventStateViewSet(GenericViewSet):
+    serializer_class = EventStateSerializer
 
-    queryset = Actuator.objects.all()
-    serializer_class = ActuatorSerializer
+    def get_object(self):
+        try:
+            return EventState.get_object(self.kwargs['pk'])
+        except:
+            raise Http404
 
-    __basic_fields = ('name',)
-    filter_fields = __basic_fields + (
-        'component_type', 'actuator_type', 'record_history', 'enabled', 'device'
-    )
-    search_fields = __basic_fields
-    ordering_fields = __basic_fields + ('created_at', 'updated_at')
-    ordering = 'name'
+    # CHECK PERMISSIONS
 
-    def perform_update(self, serializer):
-        serializer.save()
+    def list(self, request, *args, **kwargs):
+        queryset = EventState.get_collection()
+        query = {
+            'component': self.kwargs['com_pk']
+        }
 
-    def partial_update(self, request, *args, **kwargs):
-        kwargs['partial'] = True
-        return self.update(request, *args, **kwargs)
+        filters = EventStateFilter(data=request.query_params)
+        filters.is_valid(raise_exception=True)
+        queryset = filters.filter(queryset, query)
 
-    def update(self, request, *args, **kwargs):
-        partial = kwargs.pop('partial', False)
-        instance = self.get_object()
-        serializer = ActuatorUpdateSerializer(instance, data=request.data, partial=partial)
-        serializer.is_valid(raise_exception=True)
-        self.perform_update(serializer)
+        pagination = MongoPagination()
+        pagination.paginate_queryset(queryset, self.request.query_params)
 
-        if getattr(instance, '_prefetched_objects_cache', None):
-            # If 'prefetch_related' has been applied to a queryset, we need to
-            # forcibly invalidate the prefetch cache on the instance.
-            instance._prefetched_objects_cache = {}
-
-        serializer = self.get_serializer(instance)
-
-        return Response(serializer.data)
-
-    @action(methods=['put'], detail=True, permission_classes=(IsAuthenticated,))
-    def refresh(self, request, pk=None):
-        # Refresca el componente pidiendolo
-
-        serializer = ActuatorSerializer()
-
-        return Response(serializer.data,
-                        status=status.HTTP_200_OK)
+        queryset = EventState.map_objects(queryset)
+        serializer = self.get_serializer(queryset, many=True)
+        return pagination.paginated_response(serializer.data)
 
 
-class ControllerViewSet(ReadOnlyModelViewSet):
-    # permission_classes = (IsAdminUser,)
+class EventActionViewSet(GenericViewSet):
+    serializer_class = EventActionSerializer
 
-    queryset = Controller.objects.all()
-    serializer_class = ControllerSerializer
+    def get_object(self):
+        try:
+            return EventAction.get_object(self.kwargs['pk'])
+        except:
+            raise Http404
 
-    __basic_fields = ('name',)
-    filter_fields = __basic_fields + (
-        'component_type', 'controller_type', 'record_history', 'enabled', 'device'
-    )
-    search_fields = __basic_fields
-    ordering_fields = __basic_fields + ('created_at', 'updated_at')
-    ordering = 'name'
+    # CHECK PERMISSIONS
 
-    def perform_update(self, serializer):
-        serializer.save()
+    def list(self, request, *args, **kwargs):
+        queryset = EventAction.get_collection()
+        query = {
+            'component': self.kwargs['com_pk']
+        }
 
-    def partial_update(self, request, *args, **kwargs):
-        kwargs['partial'] = True
-        return self.update(request, *args, **kwargs)
+        filters = EventActionFilter(data=request.query_params)
+        filters.is_valid(raise_exception=True)
+        queryset = filters.filter(queryset, query)
 
-    def update(self, request, *args, **kwargs):
-        partial = kwargs.pop('partial', False)
-        instance = self.get_object()
-        serializer = ControllerUpdateSerializer(instance, data=request.data, partial=partial)
-        serializer.is_valid(raise_exception=True)
-        self.perform_update(serializer)
+        pagination = MongoPagination()
+        pagination.paginate_queryset(queryset, self.request.query_params)
 
-        if getattr(instance, '_prefetched_objects_cache', None):
-            # If 'prefetch_related' has been applied to a queryset, we need to
-            # forcibly invalidate the prefetch cache on the instance.
-            instance._prefetched_objects_cache = {}
-
-        serializer = self.get_serializer(instance)
-
-        return Response(serializer.data)
-
-    @action(methods=['put'], detail=True, permission_classes=(IsAuthenticated,))
-    def refresh(self, request, pk=None):
-        # Refresca el componente pidiendolo
-
-        serializer = ControllerSerializer()
-
-        return Response(serializer.data,
-                        status=status.HTTP_200_OK)
+        queryset = EventAction.map_objects(queryset)
+        serializer = self.get_serializer(queryset, many=True)
+        return pagination.paginated_response(serializer.data)
