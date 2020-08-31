@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
+import json
 
 from django.db import models
 
@@ -10,6 +11,7 @@ from .constants import (
 from apps.devices.models import Device
 from django_module_attr.models import GenericData, Tag
 
+from .models_md import EventState
 
 #
 # https://developers.google.com/assistant/smarthome/concepts/homegraph
@@ -59,3 +61,16 @@ class Component(models.Model):
         component.tags.set(tags)
 
         return component
+
+    def receive_sync(self, trait_data, event=True):
+        metadata = self.metadata.get_value()
+        if metadata:  # If None do nothing
+            metadata['data'] = trait_data['data']
+            self.metadata.value = json.dumps(metadata)
+            self.metadata.save()
+
+        if event:
+            #
+            # ACA EL TIPO HACE REFERENCIA A COMO LLEGO LA SYNC???
+            #
+            EventState.create(self.device.pk, self.pk, self.type, trait_data)

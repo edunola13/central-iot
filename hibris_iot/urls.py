@@ -61,6 +61,7 @@ urlpatterns = [
     url(r'^api/$', InfoApi.as_view(), name='info_api'),
     url(r'^api/u/', include('django_module_users.urls')),
     url(r'^api/attr/', include('django_module_attr.urls')),
+    url(r'^api/m/', include('apps.manufacters.urls')),
     url(r'^api/l/', include('apps.locations.urls')),
     url(r'^api/d/', include('apps.devices.urls')),
     url(r'^api/c/', include('apps.components.urls')),

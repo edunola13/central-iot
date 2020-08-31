@@ -10,6 +10,12 @@ class EventState(ModelBase):
     _collection_name = 'event_state'
 
     @classmethod
+    def create(cls, device, component, type, payload):
+        event = cls.create_no_save(device, component, type, payload)
+        event.save()
+        return event
+
+    @classmethod
     def create_no_save(cls, device, component, type, payload):
         event = cls({
             'device': device,
@@ -24,6 +30,12 @@ class EventState(ModelBase):
 
 class EventAction(ModelBase):
     _collection_name = 'event_action'
+
+    @classmethod
+    def create(cls, device, component, type, payload, user=None):
+        event = cls.create_no_save(device, component, type, payload, user)
+        event.save()
+        return event
 
     @classmethod
     def create_no_save(cls, device, component, type, payload, user=None):

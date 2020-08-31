@@ -1,9 +1,17 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+from django.utils.translation import ugettext as _
+
 from rest_framework import serializers
 
-from apps.components.models import Component
+from django_module_common.utils.serializers import JSONField
+
+from .constants import (
+    TYPE_OTHER, TYPE_ON_OFF
+)
+
+from .models import Component
 
 from apps.devices.serializers import DeviceMinSerializer
 from django_module_attr.serializers import TagSerializer
@@ -25,6 +33,31 @@ class ComponentSerializer(serializers.ModelSerializer):
             return obj.metadata.get_value()
 
         return None
+
+
+class ComponentActionSerializer(serializers.Serializer):
+
+    @classmethod
+    def get_for_type(cls, order_type):
+        serializers = {
+            TYPE_OTHER: ComponentActionOtherSerializer,
+            TYPE_ON_OFF: ComponentActionOnOffSerializer,
+        }
+        return serializers.get(order_type, None)
+
+    def validate(self, data):
+        if not self.instance.device.enabled or not self.instance.enabled:
+            raise serializers.ValidationError(_('El dispositivo/componente se encuentra deshabilitado'))
+
+        return data
+
+
+class ComponentActionOtherSerializer(ComponentActionSerializer):
+    data = JSONField()
+
+
+class ComponentActionOnOffSerializer(ComponentActionSerializer):
+    value = serializers.BooleanField()
 
 
 class EventStateSerializer(serializers.Serializer):

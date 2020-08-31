@@ -6,13 +6,15 @@ from django.utils.translation import ugettext_lazy as _
 
 # Types refer to general behaviors, not specific devices
 TYPE_OTHER = 'OTHER'
-TYPE_SENSOR = 'SENSOR'
-TYPE_ON_OFF = 'ON_OFF'
+TYPE_SENSOR = 'SENSOR'  # Permite recibir informacion
+TYPE_ON_OFF = 'ON_OFF'  # Permite prender/apagar determinada caracteristica
+TYPE_SETTING = 'SETTING'  # Permite configurar una caracteristica
 
 COMPONENT_TYPE_CHOICES = (
     (TYPE_OTHER, _('Otro Componente / Comportamiento')),
     (TYPE_SENSOR, _('Estado Sensor')),
     (TYPE_ON_OFF, _('Prender / Apagar')),
+    (TYPE_SETTING, _('Configuracion')),
 )
 
 EVENT_STATE_TYPE_REPORT = 'REPORT'  # Reporte de estado constante
@@ -29,6 +31,6 @@ EVENT_ACTION_TYPE_USER = 'USER'
 EVENT_ACTION_TYPE_RULE = 'RULE'
 
 EVENT_STATE_TYPE_CHOICES = (
-    (EVENT_ACTION_TYPE_USER, _('usuario')),
+    (EVENT_ACTION_TYPE_USER, _('Usuario')),
     (EVENT_ACTION_TYPE_RULE, _('Regla')),
 )

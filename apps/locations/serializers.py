@@ -21,7 +21,7 @@ class LocationMinSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Location
-        fields = ('id', 'type', 'name', 'path', 'parent', 'order',
+        fields = ('id', 'loc_uuid', 'type', 'name', 'path', 'parent', 'order',
                   'enabled', 'created_at', 'updated_at',)
 
 
@@ -30,7 +30,7 @@ class LocationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Location
-        fields = ('id', 'type', 'name', 'path', 'parent', 'order',
+        fields = ('id', 'loc_uuid', 'type', 'name', 'path', 'parent', 'order',
                   'enabled', 'created_at', 'updated_at',)
         read_only_fields = ['id', 'path', 'parent',
                             'created_at', 'updated_at']

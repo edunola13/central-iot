@@ -32,13 +32,15 @@ from apps.components.filters import EventStateFilter, EventActionFilter
 
 
 class DeviceViewSet(ModelViewSet):
-    queryset = Device.objects.all().select_related('metadata', 'location')
+    queryset = Device.objects.all().select_related('metadata', 'location', 'manufacter')
     serializer_class = DeviceSerializer
 
     filter_fields = {
         'external_id': ['exact'],
         'type': ['exact'],
         'enabled': ['exact'],
+        'location': ['exact'],
+        'manufacter': ['exact']
     }
     search_fields = ('name')
     ordering_fields = ('name', 'order', 'created_at')

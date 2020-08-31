@@ -3,6 +3,9 @@ from __future__ import unicode_literals
 
 from django.http import Http404
 
+from rest_framework import status
+from rest_framework.decorators import action
+from rest_framework.response import Response
 from rest_framework.viewsets import ReadOnlyModelViewSet, GenericViewSet
 
 from django_module_common.utils.pagination import MongoPagination
@@ -12,6 +15,7 @@ from .models_md import EventState, EventAction
 
 from apps.components.serializers import (
     ComponentSerializer,
+    ComponentActionSerializer,
     EventStateSerializer, EventActionSerializer
 )
 
@@ -19,7 +23,7 @@ from .filters import EventStateFilter, EventActionFilter
 
 
 class ComponentViewSet(ReadOnlyModelViewSet):
-    queryset = Component.objects.all().select_related("metadata").prefetch_related('tags')
+    queryset = Component.objects.all().select_related("metadata", "device").prefetch_related('tags')
     serializer_class = ComponentSerializer
 
     filter_fields = ('external_id', 'type', 'enabled', 'tags', 'device')
@@ -35,6 +39,20 @@ class ComponentViewSet(ReadOnlyModelViewSet):
         return Component.objects.filter(
             device__location__users__user=self.request.user,
             device__location__users__enabled=True
+        )
+
+    @action(methods=['post'], detail=False)
+    def action(self, request):
+        instance = self.get_object()
+        # Validate the action data against Component Type
+        serializer_class = ComponentActionSerializer.get_for_type(instance.type)
+        serializer = serializer_class(instance, data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        self.instance.device.execute_action(self.instance, serializer.validated_data, request.user)
+
+        return Response(
+            status=status.HTTP_200_OK
         )
 
 

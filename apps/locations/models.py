@@ -21,7 +21,7 @@ class Location (models.Model):
     LOC_TYPE_HOME = LOC_TYPE_HOME
     LOC_TYPE_ROOM = LOC_TYPE_ROOM
 
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    loc_uuid = models.UUIDField(default=uuid.uuid4, unique=True)
     type = models.CharField(max_length=10,
                             default=LOC_TYPE_OTHER,
                             choices=LOC_TYPE_CHOICES)

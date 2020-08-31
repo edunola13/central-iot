@@ -66,6 +66,7 @@ INSTALLED_APPS = [
     'django_module_attr',
 
     'apps.auth_hibris_iot',
+    'apps.manufacters',
     'apps.locations',
     'apps.devices',
     'apps.components',

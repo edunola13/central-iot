@@ -26,6 +26,7 @@ class LocationViewSet(ModelViewSet):
     serializer_class = LocationSerializer
 
     filter_fields = {
+        'loc_uuid': ['exact'],
         'type': ['exact'],
         'enabled': ['exact'],
         'parent': ['exact', 'isnull']

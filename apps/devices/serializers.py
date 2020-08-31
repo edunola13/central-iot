@@ -8,6 +8,7 @@ from rest_framework import serializers
 from .models import Device
 from apps.components.models import Component
 from apps.locations.models import Location
+from apps.manufacters.models import Manufacter
 from django_module_attr.models import Attribute
 
 from apps.locations.serializers import LocationMinSerializer
@@ -17,8 +18,8 @@ class DeviceMinSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Device
-        fields = ('id', 'external_id', 'name', 'type', 'status',
-                  'metadata', 'container', 'location',
+        fields = ('id', 'device_uuid', 'external_id', 'name', 'type', 'status',
+                  'metadata', 'container', 'location', 'manufacter',
                   'enabled', 'created_at', 'updated_at')
 
 
@@ -28,8 +29,8 @@ class DeviceSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Device
-        fields = ('id', 'external_id', 'name', 'type', 'status',
-                  'metadata', 'container', 'location',
+        fields = ('id', 'device_uuid', 'external_id', 'name', 'type', 'status',
+                  'metadata', 'container', 'location', 'manufacter',
                   'enabled', 'created_at', 'updated_at')
         read_only_fields = ('id', 'status', 'metadata', 'container',
                             'location', 'created_at', 'updated_at')
@@ -66,12 +67,15 @@ class DeviceCreateSerializer(serializers.ModelSerializer):
     location = serializers.PrimaryKeyRelatedField(
         queryset=Location.objects.all(), write_only=True, many=False, required=False
     )
+    manufacter = serializers.PrimaryKeyRelatedField(
+        queryset=Manufacter.objects.filter(enabled=True), write_only=True, many=False, required=False
+    )
 
     class Meta:
         model = Device
         fields = ('external_id', 'name', 'type',
                   'attrs', 'components',
-                  'container', 'location')
+                  'container', 'location', 'manufacter')
 
     def create(self, validated_data):
         # metadata = validated_data.pop('metadata', None)

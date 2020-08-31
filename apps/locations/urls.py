@@ -11,7 +11,7 @@ from .api import (
 router = DefaultRouter()
 
 router.register(r'locations', LocationViewSet, basename='locations')
-router.register(r'locations/(?P<location_pk>[0-9a-f-]+)/users', UsersLocationViewSet, basename='locations-users')
+router.register(r'locations/(?P<location_pk>\d+)/users', UsersLocationViewSet, basename='locations-users')
 
 urlpatterns = []
 

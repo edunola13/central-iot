@@ -1,14 +1,16 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+from django.utils.translation import ugettext_lazy as _
+
 LOC_TYPE_OTHER = "OTHER"
 LOC_TYPE_HOME = "HOME"
 LOC_TYPE_ROOM = "ROOM"
 
 LOC_TYPE_CHOICES = (
-    (LOC_TYPE_OTHER, 'Otro'),
-    (LOC_TYPE_HOME, 'Casa'),
-    (LOC_TYPE_ROOM, 'Habitacion'),
+    (LOC_TYPE_OTHER, _('Otro')),
+    (LOC_TYPE_HOME, _('Casa')),
+    (LOC_TYPE_ROOM, _('Habitacion')),
 )
 
 ACCESS_OWNER = "OWNER"
@@ -17,8 +19,8 @@ ACCESS_USER = "USER"
 ACCESS_READ = "READ"
 
 ACCESS_CHOICES = (
-    (ACCESS_OWNER, 'Owner'),
-    (ACCESS_ADMIN, 'Administrador'),
-    (ACCESS_USER, 'Usuario'),
-    (ACCESS_READ, 'Lectura'),
+    (ACCESS_OWNER, _('Owner')),
+    (ACCESS_ADMIN, _('Administrador')),
+    (ACCESS_USER, _('Usuario')),
+    (ACCESS_READ, _('Lectura')),
 )
