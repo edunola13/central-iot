@@ -70,6 +70,8 @@ INSTALLED_APPS = [
     'apps.locations',
     'apps.devices',
     'apps.components',
+
+    'apps.iot_devices',
 ]
 
 MIDDLEWARE = [
@@ -311,12 +313,22 @@ if TESTING:
 DEFAULT_FROM_EMAIL = env.str('DEFAULT_FROM_EMAIL', default='')
 SERVER_EMAIL = env.str('SERVER_EMAIL', default='')
 
+#
+#
+# ACOMODAR PARA VARIOS MQTT
+# POR MANUFACTER ID???
+#
+#
+
 # MQTT
 MQTT_HOST = env.str('MQTT_HOST', default='localhost')
 MQTT_PORT = env.int('MQTT_PORT', default=1883)
 MQTT_KEEP_ALIVE = env.int('MQTT_KEEP_ALIVE', default=0)
 MQTT_USERNAME = env.str('MQTT_USERNAME', default='')
 MQTT_PASSWORD = env.str('MQTT_PASSWORD', default='')
+
+# INTERNAL MANUFACTER
+INTERNAL_MANUFACTER = env.str('INTERNAL_MANUFACTER', default='')  # UUID
 
 # LOGGINGS
 LOGGING = {

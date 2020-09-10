@@ -13,6 +13,8 @@ from django_module_common.utils.pagination import MongoPagination
 from .models import Component
 from .models_md import EventState, EventAction
 
+from apps.devices.clients.proxy_manufacter import ProxyManufacter
+
 from apps.components.serializers import (
     ComponentSerializer,
     ComponentActionSerializer,
@@ -49,7 +51,7 @@ class ComponentViewSet(ReadOnlyModelViewSet):
         serializer = serializer_class(instance, data=request.data)
         serializer.is_valid(raise_exception=True)
 
-        self.instance.device.execute_action(self.instance, serializer.validated_data, request.user)
+        ProxyManufacter.execute_action_component(instance, serializer.validated_data, request.user)
 
         return Response(
             status=status.HTTP_200_OK

@@ -5,6 +5,8 @@ from django.db import transaction
 
 from rest_framework import serializers
 
+from django_module_common.utils.serializers import JSONField
+
 from apps.components.models import Component
 from django_module_attr.models import Tag
 
@@ -33,11 +35,13 @@ class ComponentSerializer(serializers.ModelSerializer):
         super(ComponentSerializer, self).update(instance, validated_data)
 
         # UPDATE METADATA COMPONENT AND DEVICE
+        # Por ahora no haria nada
 
         return instance
 
 
 class ComponentCreateSerializer(serializers.ModelSerializer):
+    config_metadata = JSONField(required=False)
     tags = serializers.PrimaryKeyRelatedField(
         queryset=Tag.objects.all(),
         write_only=True, many=True, required=False
@@ -54,7 +58,5 @@ class ComponentCreateSerializer(serializers.ModelSerializer):
         with transaction.atomic():
             validated_data.update(tags=tags)
             component = Component.create(**validated_data)
-
-        # UPDATE METADATA COMPONENT AND DEVICE
 
         return component

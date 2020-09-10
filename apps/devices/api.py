@@ -7,8 +7,7 @@ from django.utils.translation import ugettext as _
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet, GenericViewSet
-# from rest_framework.decorators import action
-from django.db import transaction
+from rest_framework.decorators import action
 
 from django_module_common.utils.exceptions import ConflictError
 from django_module_common.utils.pagination import MongoPagination
@@ -19,14 +18,18 @@ from .models import (
 from django_module_attr.models import Attribute
 from apps.components.models_md import EventState, EventAction
 
+from apps.devices.clients.proxy_manufacter import ProxyManufacter
+
 from .serializers import (
     DeviceSerializer, DeviceCreateSerializer,
+    DeviceActionSerializer,
     AttributeSerializer
 )
 from apps.components.serializers import (
     EventStateSerializer,
     EventActionSerializer
 )
+from commons.utils.serializers import MetadataSerializer
 
 from apps.components.filters import EventStateFilter, EventActionFilter
 
@@ -72,10 +75,7 @@ class DeviceViewSet(ModelViewSet):
         instance = self.get_object()
 
         try:
-            with transaction.atomic():
-                instance.components.all().delete()
-                instance.attrs.all().delete()
-                instance.delete()
+            instance.remove()
 
             return Response(status=status.HTTP_204_NO_CONTENT)
         except:
@@ -84,6 +84,46 @@ class DeviceViewSet(ModelViewSet):
     # CHANGE LOCATION
 
     # CHANGE CONTAINER
+
+    @action(methods=['put'], detail=False)
+    def metadata(self, request):
+        instance = self.get_object()
+
+        serializer = MetadataSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        metadata = instance.metadata.get_value()
+        metadata['config'] = serializer.validated_data['config_metadata']
+        instance.metadata.update_value(metadata)
+
+        return Response(
+            instance.metadata.get_value(),
+            status=status.HTTP_200_OK
+        )
+
+    @action(methods=['post'], detail=False)
+    def sync(self, request):
+        instance = self.get_object()
+
+        ProxyManufacter.execute_sync(instance)
+
+        return Response(
+            status=status.HTTP_200_OK
+        )
+
+    @action(methods=['post'], detail=False)
+    def action(self, request):
+        instance = self.get_object()
+        # Validate the action data against Component Type
+        serializer_class = DeviceActionSerializer.get_for_type(instance.type)
+        serializer = serializer_class(instance, data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        ProxyManufacter.execute_action(instance, serializer.validated_data, request.user)
+
+        return Response(
+            status=status.HTTP_200_OK
+        )
 
 
 class DeviceAttributeViewSet(ModelViewSet):

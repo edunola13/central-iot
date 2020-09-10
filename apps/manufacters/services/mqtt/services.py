@@ -4,19 +4,20 @@ import json
 
 from django.conf import settings
 
-from manufacters.services.interfaces import ManufacterInterfaceServices
+from apps.manufacters.services.interfaces import ManufacterInterfaceService
 
-from .client_mqtt import ClientMqtt
-
-from apps.devices.models import Device
+from commons.connection.mqtt.client import ClientMqtt
 
 
-class ManufacterMQTTService(ManufacterInterfaceServices):
+class ManufacterMQTTService(ManufacterInterfaceService):
 
     def __init__(self, manufacter):
         self.manufacter = manufacter
 
     def connect(self):
+        #
+        # ACOMODAR DE DONDE SE LEVANTAN LAS SETTINGS
+        #
         connect_info = {
             'MQTT_USERNAME': settings.MQTT_SERVERS[self.manufacter.id].get('MQTT_USERNAME', None),
             'MQTT_PASSWORD': settings.MQTT_PASSWORD,
@@ -36,9 +37,11 @@ class ManufacterMQTTService(ManufacterInterfaceServices):
         )
 
     def receive(self, client, topic, payload):
+        from apps.devices.models import Device
+
         device = Device.objects.get(external_id=client, manufacter=self.manufacter)
         #
         # For now simple, always comes SYNC
-        # Options: SYNC, SYNC_PARTIAL, ACTION
+        # Options: SYNC, STATE
         #
         device.receive_sync(payload)

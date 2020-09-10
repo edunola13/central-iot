@@ -1,9 +1,12 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+from django.utils.translation import ugettext as _
 from django.db import transaction
 
 from rest_framework import serializers
+
+from django_module_common.utils.serializers import JSONField
 
 from .models import Device
 from apps.components.models import Component
@@ -32,8 +35,8 @@ class DeviceSerializer(serializers.ModelSerializer):
         fields = ('id', 'device_uuid', 'external_id', 'name', 'type', 'status',
                   'metadata', 'container', 'location', 'manufacter',
                   'enabled', 'created_at', 'updated_at')
-        read_only_fields = ('id', 'status', 'metadata', 'container',
-                            'location', 'created_at', 'updated_at')
+        read_only_fields = ('id', 'device_uuid', 'status', 'metadata',
+                            'container', 'location', 'created_at', 'updated_at')
 
     def get_metadata(self, obj):
         if obj.metadata:
@@ -50,15 +53,15 @@ class AttributeCreateSerializer(serializers.ModelSerializer):
 
 
 class ComponentCreateSerializer(serializers.ModelSerializer):
-    # metadata = JSONField(required=False)
+    config_metadata = JSONField(required=False)
 
     class Meta:
         model = Component
-        fields = ('external_id', 'name', 'type')
+        fields = ('external_id', 'name', 'type', 'config_metadata')
 
 
 class DeviceCreateSerializer(serializers.ModelSerializer):
-    # metadata = JSONField(required=False)
+    config_metadata = JSONField(required=False)
     attrs = AttributeCreateSerializer(many=True, allow_empty=True)
     components = ComponentCreateSerializer(many=True, allow_empty=True)
     container = serializers.PrimaryKeyRelatedField(
@@ -74,19 +77,18 @@ class DeviceCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Device
         fields = ('external_id', 'name', 'type',
-                  'attrs', 'components',
+                  'attrs', 'components', 'config_metadata',
                   'container', 'location', 'manufacter')
 
+    #
+    # VALIDATE_UNIQUE: EXTERNAL_ID, MANUFACTER
+    #
+
     def create(self, validated_data):
-        # metadata = validated_data.pop('metadata', None)
         attrs_data = validated_data.pop('attrs')
         components_data = validated_data.pop('components')
 
         with transaction.atomic():
-            # metadata = GenericData.objects.create(
-            #     value=metadata,
-            # )
-
             attrs = []
             for atrr_data in attrs_data:
                 attr = Attribute.objects.create(**atrr_data)
@@ -97,11 +99,32 @@ class DeviceCreateSerializer(serializers.ModelSerializer):
 
             for component_data in components_data:
                 component_data.update(device=device)
-                Component.objects.create(**component_data)
-
-        # UPDATE METADATA COMPONENT AND DEVICE
+                Component.create(**component_data)
 
         return device
+
+
+class DeviceActionSerializer(serializers.Serializer):
+
+    @classmethod
+    def get_for_type(cls, order_type):
+        serializers = {
+            # SPECIFIC FOR TYPE
+        }
+        klass = serializers.get(order_type, None)
+        if klass:
+            return klass
+        return klass
+
+    def validate(self, data):
+        if not self.instance.enabled:
+            raise serializers.ValidationError(_('El dispositivo se encuentra deshabilitado'))
+
+        return data
+
+
+class DeviceActionOtherSerializer(DeviceActionSerializer):
+    data = JSONField()
 
 
 class AttributeSerializer(serializers.ModelSerializer):

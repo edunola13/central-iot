@@ -66,6 +66,8 @@ urlpatterns = [
     url(r'^api/d/', include('apps.devices.urls')),
     url(r'^api/c/', include('apps.components.urls')),
 
+    url(r'^api/iot/', include('apps.iot_devices.urls')),
+
     url(r'^api/o/token/$', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     url(r'^api/o/token/refresh/$', TokenRefreshView.as_view(), name='token_refresh'),
     url(r'^api/o/token/verify/$', TokenVerifyView.as_view(), name='token_verify'),

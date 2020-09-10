@@ -11,8 +11,6 @@ from .constants import (
 
 from django_module_attr.models import GenericData
 
-from apps.manufacter.services.factories import ManufacterFactoryService
-
 
 class Manufacter (models.Model):
     MANU_TYPE_MQTT = MANU_TYPE_MQTT
@@ -32,6 +30,3 @@ class Manufacter (models.Model):
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-
-    def send_data(self, device, data):
-        ManufacterFactoryService.get_service(self).send(device, data)
