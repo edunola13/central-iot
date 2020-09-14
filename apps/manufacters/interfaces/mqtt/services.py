@@ -4,7 +4,9 @@ import json
 
 from django.conf import settings
 
-from apps.manufacters.services.interfaces import ManufacterInterfaceService
+from apps.manufacters.interfaces.interfaces import ManufacterInterfaceService
+
+from apps.devices.constants import RECEIVE_SYNC, RECEIVE_STATE
 
 from commons.connection.mqtt.client import ClientMqtt
 
@@ -15,15 +17,12 @@ class ManufacterMQTTService(ManufacterInterfaceService):
         self.manufacter = manufacter
 
     def connect(self):
-        #
-        # ACOMODAR DE DONDE SE LEVANTAN LAS SETTINGS
-        #
         connect_info = {
-            'MQTT_USERNAME': settings.MQTT_SERVERS[self.manufacter.id].get('MQTT_USERNAME', None),
-            'MQTT_PASSWORD': settings.MQTT_PASSWORD,
-            'MQTT_HOST': settings.MQTT_HOST,
-            'MQTT_PORT': settings.MQTT_PORT,
-            'MQTT_KEEP_ALIVE': settings.MQTT_KEEP_ALIVE
+            'MQTT_USERNAME': settings.MQTT_SERVERS_MANUFACTER,
+            'MQTT_PASSWORD': settings.MQTT_PASSWORD_MANUFACTER,
+            'MQTT_HOST': settings.MQTT_HOST_MANUFACTER,
+            'MQTT_PORT': settings.MQTT_PORT_MANUFACTER,
+            'MQTT_KEEP_ALIVE': settings.MQTT_KEEP_ALIVE_MANUFACTER
         }
 
         self.client = ClientMqtt(connect_info)
@@ -40,8 +39,7 @@ class ManufacterMQTTService(ManufacterInterfaceService):
         from apps.devices.models import Device
 
         device = Device.objects.get(external_id=client, manufacter=self.manufacter)
-        #
-        # For now simple, always comes SYNC
-        # Options: SYNC, STATE
-        #
-        device.receive_sync(payload)
+        if payload['type'] == RECEIVE_SYNC:
+            device.receive_sync(payload)
+        if payload['type'] == RECEIVE_STATE:
+            device.receive_state(payload)

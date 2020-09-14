@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from apps.manufacters.services.factories import ManufacterFactoryService
+from apps.manufacters.interfaces.factories import ManufacterFactoryService
 
 from apps.devices.constants import (
     QUERY_SYNC, QUERY_ACTION

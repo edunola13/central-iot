@@ -1,24 +1,13 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from django.dispatch import receiver
-
-from apps.manufacters.services.interfaces import ManufacterInterfaceService
+from apps.manufacters.interfaces.interfaces import ManufacterInterfaceService
 
 from apps.devices.constants import RECEIVE_SYNC, RECEIVE_STATE
 
-from apps.manufacters.models import Manufacter
 from apps.devices.models import Device
 
-from .events import send_signal, receive_signal
-
-
-@receiver(receive_signal)
-def receive(sender, **kwargs):
-    services = ManufacterInternalService(
-        manufacter=Manufacter.objects.get(kwargs['manufacter'])
-    )
-    services.receive(kwargs['device_id'], kwargs['data'])
+from .events import send_signal
 
 
 class ManufacterInternalService(ManufacterInterfaceService):
