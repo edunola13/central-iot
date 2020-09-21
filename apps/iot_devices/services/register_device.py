@@ -38,7 +38,7 @@ class RegisterDevice():
         # 'device_id' => 'id in the physic device', 'type', 'version', 'secret_key' => 'in the physic device'
         # 'name' => 'a label', 'location' => 'location to register(need access)'
 
-        # Validate hte access to the device
+        # Validate the access to the device
         self._validate_device(data.get('device_id'), data.get('secret_key'))
 
         # Validate location with user
@@ -50,8 +50,21 @@ class RegisterDevice():
         if not has_access:
             raise InvalidLocation
 
+        #
+        #
+        # NO HABRIA QUE LLAMAR A UN SERVICIO DEL MODULO devices ?????
+        #
+        #
+
         # Create the device with strategy
-        return self._get_strategy(data.get('type')).register(data)
+        device = self._get_strategy(data.get('type')).register(data)
+
+        # Send sync
+        #
+        # .....
+        #
+
+        return device
 
     def unregister(self, data):
         # Validate hte access to the device

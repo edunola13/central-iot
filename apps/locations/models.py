@@ -62,7 +62,7 @@ class Location (models.Model):
         self.update_path()
 
     class Meta:
-        ordering = ('name',)
+        ordering = ('created_at',)
 
 
 class UserLocation (models.Model):

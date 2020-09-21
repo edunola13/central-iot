@@ -21,7 +21,9 @@ class DeviceInfo(ModelBase):
     def create_no_save(cls, device_id, type, version):
         event = cls({
             'device_id': device_id,  # ID declared in physical device
+            # Serial Number???
             'type': type,
+            # Gateway??? En base al gateway sale por determinado lado
             'version': version,
             'secret_key': binascii.hexlify(secrets.token_bytes(10)).decode(),
             'created_at': timezone.now(),

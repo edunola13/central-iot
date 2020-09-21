@@ -133,6 +133,9 @@ class Device(models.Model):
                 component.receive_state(trait_data)
             except models.Model.DoesNotExist:
                 pass
+        #
+        # 'traits' ???
+        #
         else:
             metadata = self.metadata.get_value()
             if metadata:  # If None do nothing

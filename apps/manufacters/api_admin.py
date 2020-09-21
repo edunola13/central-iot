@@ -33,7 +33,7 @@ class AdminManufacterViewSet(ModelViewSet):
 
     def get_permissions(self):
         if self.detail:
-            self.permission_classes = [AdminSpecificManufacterDetail]
+            self.permission_classes = [AdminManufacters | AdminSpecificManufacterDetail]
         return super(AdminManufacterViewSet, self).get_permissions()
 
     def create(self, request, *args, **kwargs):

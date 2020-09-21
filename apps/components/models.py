@@ -48,7 +48,7 @@ class Component(models.Model):
         return self.name
 
     class Meta:
-        ordering = ('name',)
+        ordering = ('created_at',)
 
     @classmethod
     def create(cls, external_id, name, device, type=TYPE_OTHER, config_metadata=None, tags=[]):

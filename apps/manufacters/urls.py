@@ -14,7 +14,7 @@ from .api_admin import (
 
 router = DefaultRouter()
 # Public
-router.register(r'admin/manufacters', ManufacterViewSet, basename='manufacters')
+router.register(r'public/manufacters', ManufacterViewSet, basename='manufacters')
 # Admin
 router.register(r'admin/manufacters', AdminManufacterViewSet, basename='manufacters')
 router.register(r'admin/manufacters/(?P<manu_pk>\d+)/config', AdminManufacterConfigViewSet, basename='manufacters_config')

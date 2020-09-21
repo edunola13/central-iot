@@ -64,7 +64,7 @@ class WorkerMqtt(object):
         #
         # Aca se podria usar workers de zeromq del tipo pull asi se hace todo mas rapido
         #
-        logging.info("New Event {}: {}: {}".format(client, msg.topic, msg.payload))
+        logging.info("New Event {}: {}".format(msg.topic, msg.payload))
         try:
             self.interface.receive_mqtt(msg.topic, msg.payload)
         except:

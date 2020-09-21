@@ -10,6 +10,8 @@ from apps.iot_devices.services.internal_interface import InternalInterfaceServic
 #
 # DECLARE OBSERVERS
 #
+
+# Observer for internal interfaces
 @receiver(send_signal)
 def send(sender, **kwargs):
     services = InternalInterfaceService()

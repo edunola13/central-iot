@@ -17,7 +17,7 @@ class Manufacter (models.Model):
     MANU_TYPE_REST = MANU_TYPE_REST
 
     manu_uuid = models.UUIDField(default=uuid.uuid4, unique=True)
-    type = models.CharField(max_length=10,
+    type = models.CharField(max_length=10,  # Define the communication with the cloud manufacter
                             default=MANU_TYPE_MQTT,
                             choices=MANU_TYPE_CHOICES)
     name = models.CharField(max_length=100)

@@ -9,5 +9,5 @@ from .api import (
 
 
 urlpatterns = [
-    url(r'^device/$', RegisterDeviceView.as_view(), name='register'),
+    url(r'^devices/$', RegisterDeviceView.as_view(), name='register'),
 ]

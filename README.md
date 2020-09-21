@@ -63,8 +63,10 @@ It's not necessary run in the root folder of the app. This is globally. https://
 `(env) $ celery -A hibris_iot worker -l info`
 `(env) $ celery -A hibris_iot beat -l info`
 
-## Run Worker MQTT
-`(env) $ python manage_gateway.py`
+## Run diferents workers
+`(env) $ python main.py {worker}`
+workers:
+- iot_listener_mqtt 
 
 ## Run tests with coverage
 `(env) $ coverage run --omit=env/* manage.py test`

@@ -15,9 +15,9 @@ router = DefaultRouter()
 router.register(r'devices', DeviceViewSet, basename='devices')
 router.register(r'devices/(?P<device_pk>[0-9a-f-]+)/attributes',
                 DeviceAttributeViewSet, basename='devices-attrs')
-router.register(r'components/(?P<device_pk>[0-9a-f-]+)/events-state',
+router.register(r'devices/(?P<device_pk>[0-9a-f-]+)/events-state',
                 EventStateViewSet, basename='components-events-state')
-router.register(r'components/(?P<device_pk>[0-9a-f-]+)/events-action',
+router.register(r'devices/(?P<device_pk>[0-9a-f-]+)/events-action',
                 EventActionViewSet, basename='components-events-action')
 
 urlpatterns = [
