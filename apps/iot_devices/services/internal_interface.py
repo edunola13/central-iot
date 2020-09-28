@@ -8,6 +8,11 @@ from commons.connection.mqtt.client import ClientMqtt
 
 from apps.manufacters.interfaces.internal.events import receive_signal
 
+#
+#
+# ESTE NO VA MAS, SE VA A interface.py por gateway
+#
+#
 
 #
 # This services know how send and receive from physic devices
@@ -18,15 +23,12 @@ class InternalInterfaceService():
     def send_mqtt(self, device_id, data):
         """
             Recibe el device_id y la data a enviar al device
-            params:
-                device_id: Identificador unico de device
-                data: {
-                    type: El tipo de query (sync, action, etc)
-                    trait: El identificador unico por comportamiento
-                    data: {
-                        Aca puede venir cualquier cosa en base al tipo
-                    }
-                }
+            :param device_id: Identificador unico de device
+            :param data:
+            {
+                type: El tipo propio del device
+                ... data
+            }
         """
 
         connect_info = {
@@ -50,18 +52,30 @@ class InternalInterfaceService():
         )
 
     def receive_mqtt(self, topic, payload):
+        """
+            Recibe un topico y el payload asociado
+            :param topic: Topico donde viene el "device_id" y "method"
+            :param payload:
+            {
+                "type": El tipo propio del device
+                ... data
+            }
+        """
+
         topic_splitted = topic.split("/")
         if len(topic_splitted) < 3:
             # Ignore
             return
 
         device_id = topic_splitted[1]
-        method = topic_splitted[2]
+        method = topic_splitted[2]  # For now: pub, sub.
 
         if method == "pub":
 
             #
-            # Parsear data, hacer lo que quiera y emitir senal
+            # Parsear data para que la entienda Manufacter.s
+            # Para esto ir a un servicio especifico por device que va a entender que
+            # es lo que esta mandando el device.
             #
 
             receive_signal.send(
