@@ -86,7 +86,7 @@ class DeviceViewSet(ModelViewSet):
     # CHANGE CONTAINER
 
     @action(methods=['put'], detail=False)
-    def metadata(self, request):
+    def metadata(self, request, *args, **kwargs):
         instance = self.get_object()
 
         serializer = MetadataSerializer(data=request.data)
@@ -101,8 +101,8 @@ class DeviceViewSet(ModelViewSet):
             status=status.HTTP_200_OK
         )
 
-    @action(methods=['post'], detail=False)
-    def sync(self, request):
+    @action(methods=['post'], detail=True)
+    def sync(self, request, *args, **kwargs):
         instance = self.get_object()
 
         ProxyManufacter.execute_sync(instance)
@@ -111,15 +111,29 @@ class DeviceViewSet(ModelViewSet):
             status=status.HTTP_200_OK
         )
 
-    @action(methods=['post'], detail=False)
-    def action(self, request):
+    @action(methods=['post'], detail=True)
+    def refresh(self, request, *args, **kwargs):
+        instance = self.get_object()
+
+        ProxyManufacter.execute_refresh(instance)
+
+        return Response(
+            status=status.HTTP_200_OK
+        )
+
+    @action(methods=['post'], detail=True)
+    def action(self, request, *args, **kwargs):
         instance = self.get_object()
         # Validate the action data against Component Type
         serializer_class = DeviceActionSerializer.get_for_type(instance.type)
         serializer = serializer_class(instance, data=request.data)
         serializer.is_valid(raise_exception=True)
 
-        ProxyManufacter.execute_action(instance, serializer.validated_data, request.user)
+        ProxyManufacter.execute_action(
+            instance,
+            serializer.validated_data,
+            request.user
+        )
 
         return Response(
             status=status.HTTP_200_OK

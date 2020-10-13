@@ -1,10 +1,15 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+import uuid
+
 from django.dispatch import receiver
 
+from apps.iot_devices.gateways.interface import GatewayInterfaceService
+
 from apps.manufacters.interfaces.internal.events import send_signal
-from apps.iot_devices.services.internal_interface import InternalInterfaceService
+
+from apps.iot_devices.models_md import DeviceInfo
 
 
 #
@@ -14,5 +19,20 @@ from apps.iot_devices.services.internal_interface import InternalInterfaceServic
 # Observer for internal interfaces
 @receiver(send_signal)
 def send(sender, **kwargs):
-    services = InternalInterfaceService()
-    services.send_mqtt(kwargs['device_id'], kwargs['data'])
+    """
+    Recibe el evento para enviar un mensaje al device.
+    Args:
+        sender
+        kargws: {
+            'device_id' str: Es necesario pasarlo a uuid,
+            'data' Payload
+        }
+    """
+
+    device = DeviceInfo.get_device(uuid.UUID(kwargs['device_id']))
+
+    # Enviar por el gateway correspondiente el mensaje
+    GatewayInterfaceService.send(
+        device,
+        kwargs['data']
+    )

@@ -2,7 +2,7 @@ from django.apps import AppConfig
 
 
 class IOTDevicesConfig(AppConfig):
-    name = 'iot_devices'
+    name = 'apps.iot_devices'
 
-   	def ready(self):
+    def ready(self):
         import apps.iot_devices.signals

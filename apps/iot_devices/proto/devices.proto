@@ -1,0 +1,43 @@
+syntax = "proto3";
+
+package apps.iot_devices;
+
+
+message Trait {
+  string id = 1;
+  string type = 2;
+  string name = 3;
+  map<string, string> values = 4;  // Config, data, values, etc
+}
+
+message Device {
+  string device_id = 1;
+  string type = 2;
+  string name = 3;
+   
+  map<string, string> values = 4;  // Config, data, values, etc
+   
+  repeated Trait traits = 5;
+  repeated Device devices = 6;
+}
+
+message Payload {
+  enum PayloadType {
+    PAYLOAD_TYPE_NONE = 0;
+    SYNC = 1;
+    EXECUTE = 2;
+    STATE = 3;
+  }
+  enum PayloadSubType {
+    PAYLOAD_SUB_TYPE_NONE = 0;  // SYNC | EXECUTE | STATE (When you apply)
+    STATE_NOTIFY = 1;  // STATE
+    STATE_REPORT = 2;  // STATE
+    STATE_ALERT = 3;  // STATE
+  }
+
+  PayloadType type = 1;
+  PayloadSubType sub_type = 2;
+
+  Device device = 4;
+  repeated Trait traits = 5;
+}

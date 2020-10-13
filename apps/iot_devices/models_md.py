@@ -12,18 +12,18 @@ class DeviceInfo(ModelBase):
     _collection_name = 'devices_info'
 
     @classmethod
-    def create(cls, device_id, type, version):
-        device = cls.create_no_save(device_id, type, version)
+    def create(cls, device_id, model_type, version):
+        device = cls.create_no_save(device_id, model_type, version)
         device.save()
         return device
 
     @classmethod
-    def create_no_save(cls, device_id, type, version):
+    def create_no_save(cls, device_id, model_type, version):
         event = cls({
             'device_id': device_id,  # ID declared in physical device
             # Serial Number???
-            'type': type,
-            # Gateway??? En base al gateway sale por determinado lado
+            'model_type': model_type,
+            'gateway': 'MQTT',
             'version': version,
             'secret_key': binascii.hexlify(secrets.token_bytes(10)).decode(),
             'created_at': timezone.now(),
@@ -32,9 +32,28 @@ class DeviceInfo(ModelBase):
         return event
 
     @classmethod
-    def get_device(cls, device_id, secret_key):
+    def get_device(cls, device_id):
         query = DeviceInfo.get_collection().find({
-            'device_id': device_id,
-            'secret_key': secret_key
+            'device_id': device_id
         })
         return DeviceInfo.next_object(query)
+
+
+class DeviceCloud(ModelBase):
+    _collection_name = 'devices_cloud'
+
+    @classmethod
+    def create(cls, device_id, cloud):
+        device = cls.create_no_save(device_id, cloud)
+        device.save()
+        return device
+
+    @classmethod
+    def create_no_save(cls, device_id, cloud):
+        event = cls({
+            'device_id': device_id,  # ID declared in physical device
+            'cloud': cloud,
+            'created_at': timezone.now(),
+            'updated_at': timezone.now()
+        })
+        return event

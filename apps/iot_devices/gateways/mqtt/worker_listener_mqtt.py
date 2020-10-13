@@ -7,7 +7,7 @@ import logging
 from django.conf import settings
 import paho.mqtt.client as mqtt
 
-from apps.iot_devices.services.internal_interface import InternalInterfaceService
+from .interface import MQTTInterfaceService
 
 
 class WorkerMqtt(object):
@@ -23,8 +23,6 @@ class WorkerMqtt(object):
         self.client.username_pw_set(settings.MQTT_USERNAME_IOT, settings.MQTT_PASSWORD_IOT)
         # self.client.tls_set("/home/eduardo/Documents/mosquitto-ssl-cert/mosq-ca.crt", tls_version=ssl.PROTOCOL_TLSv1_2)
         self.client.connect(settings.MQTT_HOST_IOT, settings.MQTT_PORT_IOT, settings.MQTT_KEEP_ALIVE_IOT)
-
-        self.interface = InternalInterfaceService()
 
     def loop_forever(self):
         # Blocking call that processes network traffic, dispatches callbacks and
@@ -66,6 +64,6 @@ class WorkerMqtt(object):
         #
         logging.info("New Event {}: {}".format(msg.topic, msg.payload))
         try:
-            self.interface.receive_mqtt(msg.topic, msg.payload)
+            MQTTInterfaceService.receive(msg.topic, msg.payload)
         except:
             logging.exception("[MQTT IOT on_event]")

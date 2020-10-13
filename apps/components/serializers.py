@@ -47,7 +47,9 @@ class ComponentActionSerializer(serializers.Serializer):
 
     def validate(self, data):
         if not self.instance.device.enabled or not self.instance.enabled:
-            raise serializers.ValidationError(_('El dispositivo/componente se encuentra deshabilitado'))
+            raise serializers.ValidationError(
+                _('El dispositivo/componente se encuentra deshabilitado')
+            )
 
         return data
 
@@ -57,7 +59,7 @@ class ComponentActionOtherSerializer(ComponentActionSerializer):
 
 
 class ComponentActionOnOffSerializer(ComponentActionSerializer):
-    value = serializers.BooleanField()
+    on = serializers.IntegerField()
 
 
 class EventStateSerializer(serializers.Serializer):

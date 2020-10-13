@@ -2,12 +2,14 @@
 from __future__ import unicode_literals
 
 from apps.manufacters.constants import (
-    MANU_TYPE_MQTT
+    MANU_TYPE_INTERNAL, MANU_TYPE_MQTT
 )
 
+from .internal.services import ManufacterInternalService
 from .mqtt.services import ManufacterMQTTService
 
 SERVICES = {
+    MANU_TYPE_INTERNAL: ManufacterInternalService,
     MANU_TYPE_MQTT: ManufacterMQTTService
 }
 

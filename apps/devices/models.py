@@ -3,14 +3,16 @@ from __future__ import unicode_literals
 import uuid
 
 from django.db import models, transaction
+from django.contrib.auth import get_user_model
+from django.core.exceptions import ObjectDoesNotExist
+
+from apps.iot_devices.proto.devices_pb2 import Payload
+from apps.iot_devices.proto.wrapper import PayloadWrapper
 
 from .constants import (
     TYPE_OTHER, DEVICE_TYPE_CHOICES,
     STATUS_INITIAL, STATUS_OK, DEVICE_STATUS_CHOICES,
-    QUERY_SYNC, QUERY_ACTION
-)
-from apps.components.constants import (
-    EVENT_ACTION_TYPE_USER, EVENT_ACTION_TYPE_RULE
+    QUERY_ACTION_TYPE_USER, QUERY_ACTION_TYPE_RULE
 )
 
 from django_module_attr.models import GenericData, Attribute
@@ -19,14 +21,18 @@ from apps.locations.models import Location
 from apps.manufacters.models import Manufacter
 from apps.components.models_md import EventAction, EventState
 
-#
-# https://developers.google.com/assistant/smarthome/guides
-# https://developers.google.com/assistant/smarthome/concepts/homegraph
-# https://developers.google.com/assistant/smarthome/concepts/devices-traits
-#
+User = get_user_model()
 
 
 class Device(models.Model):
+    """
+    Modelo Device.
+
+    https://developers.google.com/assistant/smarthome/guides
+    https://developers.google.com/assistant/smarthome/concepts/homegraph
+    https://developers.google.com/assistant/smarthome/concepts/devices-traits
+    """
+
     device_uuid = models.UUIDField(default=uuid.uuid4, unique=True)
     external_id = models.CharField(max_length=100)
     name = models.CharField(max_length=100, blank=True, default='')
@@ -75,8 +81,8 @@ class Device(models.Model):
     ):
         with transaction.atomic():
             metadata = GenericData.create({
-                'config': config_metadata,  # Every device store that it need
-                'data': {},  # Some state, value general. For example: status of alarm
+                'config': config_metadata,  # Every device store that it need (only cloud)
+                'data': {},  # Some state, value general. For example: name, status of alarm
             })
 
             device = Device.objects.create(
@@ -93,62 +99,71 @@ class Device(models.Model):
         return device
 
     def remove(self):
+        """Remueve el device con tosos sus componentes y atributos."""
         with transaction.atomic():
             self.components.all().delete()
             self.attrs.all().delete()
             self.delete()
 
-    def register_action(self, data, user=None):
-        # Register the event
+    def register_action(self, payload: PayloadWrapper, user: User=None):
+        """Register the event."""
         EventAction.create(
             self.id,
             None,  # No component
-            EVENT_ACTION_TYPE_USER if user else EVENT_ACTION_TYPE_RULE,
-            data,
+            QUERY_ACTION_TYPE_USER if user else QUERY_ACTION_TYPE_RULE,
+            payload.to_dict(),
             user.id if user else None
         )
 
-    def receive_sync(self, payload):
+    def receive_sync(self, payload: PayloadWrapper):
         if self.status != STATUS_OK:
             self.status = STATUS_OK
-            self.save()
+            self.save(update_fields=['status'])
 
         metadata = self.metadata.get_value()
         if metadata:  # If None do nothing
-            metadata['data'] = payload['data']
+            metadata['data'] = {k: v for k, v in payload.device.values.items()}
             self.metadata.update_value(metadata)
+            if payload.device.name:
+                self.name = payload.device.name
+                self.save(update_fields=['name'])
 
-        for trait_data in payload.get('traits', []):
+        for trait in payload.traits:
             try:
-                component = self.components.get(external_id=trait_data.get('external_id', None))
-                component.receive_sync(trait_data, False)
-            except models.Model.DoesNotExist:
+                component = self.components.get(external_id=trait.id)
+                component.receive_sync(payload, trait, False)
+            except ObjectDoesNotExist:
                 pass
 
-    def receive_state(self, payload):
-        if 'trait' in payload:
-            trait_data = payload['trait']
-            try:
-                component = self.components.get(external_id=trait_data.get('external_id', None))
-                component.receive_state(trait_data)
-            except models.Model.DoesNotExist:
-                pass
-        #
-        # 'traits' ???
-        #
-        else:
+    def receive_state(self, payload: PayloadWrapper):
+        if payload.device.name:
+            self.name = payload.device.name
+            self.save(update_fields=['name'])
+
+        if payload.device.values:
             metadata = self.metadata.get_value()
             if metadata:  # If None do nothing
-                metadata['data'] = payload['data']
+                metadata['data'].update(
+                    {k: v for k, v in payload.device.values.items()}
+                )
                 self.metadata.update_value(metadata)
 
-            EventState.create(
-                self.pk,
-                None,  # No component
-                payload['sub_type'],
-                payload['data']
-            )
+            if payload.sub_type != Payload.PAYLOAD_SUB_TYPE_NONE:
+                # If NONE solicito el cloud, entonces no registrar
+                EventState.create(
+                    self.pk,
+                    None,  # No component
+                    payload.sub_type,
+                    payload.device.values
+                )
 
-    def receive_action(self, payload):
-        # Not for now
+        for trait in payload.traits:
+            try:
+                component = self.components.get(external_id=trait.id)
+                component.receive_state(payload, trait)
+            except ObjectDoesNotExist:
+                pass
+
+    def receive_action(self, payload: PayloadWrapper):
+        """Not for now."""
         pass

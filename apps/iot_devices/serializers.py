@@ -8,14 +8,14 @@ from rest_framework import serializers
 from apps.locations.models import Location
 
 from .constants import (
-    TYPE_CHOICES,
-    TYPE_RELAYS
+    MODEL_TYPE_CHOICES,
+    MODEL_TYPE_RELAYS
 )
 
 
 class RegisterDeviceSerializer(serializers.Serializer):
-    device_id = serializers.CharField(max_length=40)
-    type = serializers.ChoiceField(choices=TYPE_CHOICES)
+    device_id = serializers.UUIDField()
+    model_type = serializers.ChoiceField(choices=MODEL_TYPE_CHOICES)
     version = serializers.CharField(max_length=10)
     secret_key = serializers.CharField(max_length=10)
     name = serializers.CharField(max_length=100)
@@ -24,11 +24,11 @@ class RegisterDeviceSerializer(serializers.Serializer):
     )
 
     @classmethod
-    def get_for_type(cls, type):
+    def get_for_type(cls, model_type):
         serializers = {
-            TYPE_RELAYS: RegisterDeviceRelaysSerializer,
+            MODEL_TYPE_RELAYS: RegisterDeviceRelaysSerializer,
         }
-        return serializers.get(type, RegisterDeviceSerializer)
+        return serializers.get(model_type, RegisterDeviceSerializer)
 
 
 class RegisterDeviceRelaysSerializer(RegisterDeviceSerializer):
@@ -36,5 +36,5 @@ class RegisterDeviceRelaysSerializer(RegisterDeviceSerializer):
 
 
 class UnregisterDeviceSerializer(serializers.Serializer):
-    device_id = serializers.CharField(max_length=40)
+    device_id = serializers.UUIDField()
     secret_key = serializers.CharField(max_length=10)

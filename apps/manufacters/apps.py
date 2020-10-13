@@ -2,7 +2,7 @@ from django.apps import AppConfig
 
 
 class ManufactersConfig(AppConfig):
-    name = 'manufacters'
+    name = 'apps.manufacters'
 
-   	def ready(self):
+    def ready(self):
         import apps.manufacters.signals

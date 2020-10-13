@@ -6,7 +6,7 @@ from django.conf import settings
 
 from apps.manufacters.interfaces.interfaces import ManufacterInterfaceService
 
-from apps.devices.constants import RECEIVE_SYNC, RECEIVE_STATE
+from apps.devices.constants import QUERY_SYNC, QUERY_STATE
 
 from commons.connection.mqtt.client import ClientMqtt
 
@@ -39,7 +39,7 @@ class ManufacterMQTTService(ManufacterInterfaceService):
         from apps.devices.models import Device
 
         device = Device.objects.get(external_id=client, manufacter=self.manufacter)
-        if payload['type'] == RECEIVE_SYNC:
+        if payload['type'] == QUERY_SYNC:
             device.receive_sync(payload)
-        if payload['type'] == RECEIVE_STATE:
+        if payload['type'] == QUERY_STATE:
             device.receive_state(payload)

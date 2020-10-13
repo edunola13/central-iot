@@ -15,6 +15,6 @@ from apps.manufacters.models import Manufacter
 @receiver(receive_signal)
 def receive(sender, **kwargs):
     services = ManufacterInternalService(
-        manufacter=Manufacter.objects.get(kwargs['manufacter_id'])
+        manufacter=Manufacter.objects.get(manu_uuid=kwargs['manufacter_uuid'])
     )
     services.receive(kwargs['device_id'], kwargs['data'])

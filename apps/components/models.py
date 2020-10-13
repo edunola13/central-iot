@@ -2,25 +2,34 @@
 from __future__ import unicode_literals
 
 from django.db import models, transaction
+from django.contrib.auth import get_user_model
+
+from apps.iot_devices.proto.devices_pb2 import Payload, Trait
+from apps.iot_devices.proto.wrapper import PayloadWrapper
 
 from .constants import (
     TYPE_OTHER, COMPONENT_TYPE_CHOICES,
-    EVENT_ACTION_TYPE_USER, EVENT_ACTION_TYPE_RULE
 )
-from apps.devices.constants import QUERY_ACTION
+from apps.devices.constants import (
+    QUERY_ACTION_TYPE_USER, QUERY_ACTION_TYPE_RULE
+)
 
 from apps.devices.models import Device
 from django_module_attr.models import GenericData, Tag
 
 from .models_md import EventState, EventAction
 
-#
-# https://developers.google.com/assistant/smarthome/concepts/homegraph
-# https://developers.google.com/assistant/smarthome/traits
-#
+User = get_user_model()
 
 
 class Component(models.Model):
+    """
+    Modelo Component (Trait).
+
+    https://developers.google.com/assistant/smarthome/concepts/homegraph
+    https://developers.google.com/assistant/smarthome/traits
+    """
+
     external_id = models.CharField(max_length=100)
     name = models.CharField(max_length=100)
     type = models.CharField(max_length=10,
@@ -69,35 +78,44 @@ class Component(models.Model):
 
         return component
 
-    def register_action(self, data, user=None):
+    def register_action(self, payload: PayloadWrapper, user: User=None):
         # Register the event
         EventAction.create(
             self.device.id,
             self.id,
-            EVENT_ACTION_TYPE_USER if user else EVENT_ACTION_TYPE_RULE,
-            data,
+            QUERY_ACTION_TYPE_USER if user else QUERY_ACTION_TYPE_RULE,
+            payload.to_dict(),
             user.id if user else None
         )
 
-    def receive_sync(self, payload, event=True):
+    def receive_sync(self, payload: PayloadWrapper, trait: Trait, event: bool=True):
         metadata = self.metadata.get_value()
         if metadata:  # If None do nothing
-            metadata['data'] = payload['data']
+            metadata['data'] = {k: v for k, v in trait.values.items()}
             self.metadata.update_value(metadata)
+            if trait.name:
+                self.name = trait.name
+                self.save(update_fields=['name'])
 
-    def receive_state(self, payload):
+    def receive_state(self, payload: PayloadWrapper, trait: Trait):
+        if trait.name:
+            self.name = trait.name
+            self.save(update_fields=['name'])
+
         metadata = self.metadata.get_value()
         if metadata:  # If None do nothing
-            metadata['data'] = payload['data']
+            metadata['data'].update({k: v for k, v in trait.values.items()})
             self.metadata.update_value(metadata)
 
-        EventState.create(
-            self.device.pk,
-            self.pk,
-            payload['sub_type'],
-            payload['data']
-        )
+        if payload.sub_type != Payload.PAYLOAD_SUB_TYPE_NONE:
+            # If NONE solicito el cloud, entonces no registrar
+            EventState.create(
+                self.device.pk,
+                self.pk,
+                payload.sub_type,
+                trait.values
+            )
 
     def receive_action(self, data):
-        # Not for now
+        """Not for now."""
         pass
