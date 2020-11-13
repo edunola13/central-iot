@@ -5,7 +5,7 @@ import uuid
 
 from django.dispatch import receiver
 
-from apps.iot_devices.gateways.interface import GatewayInterfaceService
+from apps.iot_devices.gateways.proxy import GatewayProxyService
 
 from apps.manufacters.interfaces.internal.events import send_signal
 
@@ -32,7 +32,7 @@ def send(sender, **kwargs):
     device = DeviceInfo.get_device(uuid.UUID(kwargs['device_id']))
 
     # Enviar por el gateway correspondiente el mensaje
-    GatewayInterfaceService.send(
+    GatewayProxyService.send(
         device,
         kwargs['data']
     )

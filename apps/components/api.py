@@ -8,6 +8,7 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.viewsets import ReadOnlyModelViewSet, GenericViewSet
 
+from django_module_common.utils.exceptions import ConflictError
 from django_module_common.utils.pagination import MongoPagination
 
 from .models import Component
@@ -44,8 +45,12 @@ class ComponentViewSet(ReadOnlyModelViewSet):
         )
 
     @action(methods=['post'], detail=True)
-    def action(self, request, *args, **kwargs):
+    def execute(self, request, *args, **kwargs):
         instance = self.get_object()
+
+        if not instance.is_ready():
+            raise ConflictError(detail=_('Primero debe sincronizar el dispositivo'))
+
         # Validate the action data against Component Type
         serializer_class = ComponentActionSerializer.get_for_type(instance.type)
         serializer = serializer_class(instance, data=request.data)

@@ -33,6 +33,8 @@ class ProxyManufacter(object):
 
     @classmethod
     def execute_refresh(cls, device):
+        assert device.is_ready()
+
         payload_proto = PayloadProto(
             type=PayloadProto.PayloadType.STATE,
             sub_type=PayloadProto.PayloadSubType.PAYLOAD_SUB_TYPE_NONE,
@@ -44,6 +46,8 @@ class ProxyManufacter(object):
 
     @classmethod
     def execute_action(cls, device, data, user=None):
+        assert device.is_ready()
+
         default_data = data.pop('data', {})  # Get default data
         data.update(default_data)  # Join default data
 
@@ -65,6 +69,8 @@ class ProxyManufacter(object):
 
     @classmethod
     def execute_action_component(cls, component, data, user=None):
+        assert device.is_ready()
+
         default_data = data.pop('data', {})  # Get default data
         data.update(default_data)  # Join default data
 

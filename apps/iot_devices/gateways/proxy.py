@@ -18,7 +18,7 @@ INTERFACES = {
 }
 
 
-class GatewayInterfaceService():
+class GatewayProxyService():
     """Gateway Interface."""
 
     @classmethod

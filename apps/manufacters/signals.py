@@ -9,11 +9,13 @@ from apps.manufacters.interfaces.internal.services import ManufacterInternalServ
 from apps.manufacters.models import Manufacter
 
 
-#
-# DECLARE OBSERVERS
-#
 @receiver(receive_signal)
 def receive(sender, **kwargs):
+    """
+    Declare Observer for manufacter INTERNAL.
+    
+    Por aca se recibe lo que entra por IOT Devices.
+    """
     services = ManufacterInternalService(
         manufacter=Manufacter.objects.get(manu_uuid=kwargs['manufacter_uuid'])
     )

@@ -49,6 +49,14 @@ Run the command:
 
 Notes: https://docs.djangoproject.com/en/2.2/howto/static-files/deployment/#serving-static-files-from-a-dedicated-server
 
+## Django Extensions
+The lib 'django-extensions' provide utils functions. For example we can see the all urls and your reverse names.
+
+Add in installed_apps -> 'django_extensions'
+
+`(env) $ pip install django-extensions`
+`(env) $ python manage.py show_urls`
+
 ## Run Server API
 `(env) $ python manage.py runserver 0.0.0.0:port`
 

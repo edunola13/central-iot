@@ -11,7 +11,8 @@ from apps.iot_devices.proto.wrapper import PayloadWrapper
 
 from .constants import (
     TYPE_OTHER, DEVICE_TYPE_CHOICES,
-    STATUS_INITIAL, STATUS_OK, DEVICE_STATUS_CHOICES,
+    STATUS_INITIAL, STATUS_OK, STATUS_DISCONNECT,
+    DEVICE_STATUS_CHOICES,
     QUERY_ACTION_TYPE_USER, QUERY_ACTION_TYPE_RULE
 )
 
@@ -116,24 +117,29 @@ class Device(models.Model):
         )
 
     def receive_sync(self, payload: PayloadWrapper):
-        if self.status != STATUS_OK:
-            self.status = STATUS_OK
+        try:
+            if self.status != STATUS_OK:
+                self.status = STATUS_OK
+                self.save(update_fields=['status'])
+
+            metadata = self.metadata.get_value()
+            if metadata:  # If None do nothing
+                metadata['data'] = {k: v for k, v in payload.device.values.items()}
+                self.metadata.update_value(metadata)
+                if payload.device.name:
+                    self.name = payload.device.name
+                    self.save(update_fields=['name'])
+
+            for trait in payload.traits:
+                try:
+                    component = self.components.get(external_id=trait.id)
+                    component.receive_sync(payload, trait, False)
+                except ObjectDoesNotExist:
+                    pass
+        except:
+            logging.exception('[SYNC] Fail the sync response.')
+            self.status = STATUS_ERROR
             self.save(update_fields=['status'])
-
-        metadata = self.metadata.get_value()
-        if metadata:  # If None do nothing
-            metadata['data'] = {k: v for k, v in payload.device.values.items()}
-            self.metadata.update_value(metadata)
-            if payload.device.name:
-                self.name = payload.device.name
-                self.save(update_fields=['name'])
-
-        for trait in payload.traits:
-            try:
-                component = self.components.get(external_id=trait.id)
-                component.receive_sync(payload, trait, False)
-            except ObjectDoesNotExist:
-                pass
 
     def receive_state(self, payload: PayloadWrapper):
         if payload.device.name:
@@ -167,3 +173,6 @@ class Device(models.Model):
     def receive_action(self, payload: PayloadWrapper):
         """Not for now."""
         pass
+
+    def is_ready(self):
+        return self.status in [STATUS_OK, STATUS_DISCONNECT]

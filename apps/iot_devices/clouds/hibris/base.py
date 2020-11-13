@@ -26,7 +26,7 @@ from apps.locations.models import UserLocation
 
 from apps.iot_devices.models_md import DeviceInfo
 
-from apps.iot_devices.gateways.interface import GatewayInterfaceService
+from apps.iot_devices.gateways.proxy import GatewayProxyService
 from apps.manufacters.interfaces.internal.events import receive_signal
 
 
@@ -89,7 +89,7 @@ class HibrisService():
                 name=device.name
             )
         )
-        GatewayInterfaceService.send(
+        GatewayProxyService.send(
             self.device,
             payload_proto
         )
@@ -137,7 +137,7 @@ class BaseHibrisStrategy():
         self.device = device
 
     def register(self, data, user):
-        raise NotImplemented
+        raise NotImplementedError
 
 
 class WeatherStationStrategy(BaseHibrisStrategy):

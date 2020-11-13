@@ -115,6 +115,9 @@ class DeviceViewSet(ModelViewSet):
     def refresh(self, request, *args, **kwargs):
         instance = self.get_object()
 
+        if not instance.is_ready():
+            raise ConflictError(detail=_('Primero debe sincronizar el dispositivo'))
+
         ProxyManufacter.execute_refresh(instance)
 
         return Response(
@@ -122,8 +125,12 @@ class DeviceViewSet(ModelViewSet):
         )
 
     @action(methods=['post'], detail=True)
-    def action(self, request, *args, **kwargs):
+    def execute(self, request, *args, **kwargs):
         instance = self.get_object()
+
+        if not instance.is_ready():
+            raise ConflictError(detail=_('Primero debe sincronizar el dispositivo'))
+
         # Validate the action data against Component Type
         serializer_class = DeviceActionSerializer.get_for_type(instance.type)
         serializer = serializer_class(instance, data=request.data)

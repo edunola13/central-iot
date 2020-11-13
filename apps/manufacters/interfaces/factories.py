@@ -19,5 +19,5 @@ class ManufacterFactoryService():
     @classmethod
     def get_service(cls, manufacter, **kwargs):
         if manufacter.type not in SERVICES:
-            raise NotImplemented
+            raise NotImplementedError
         return SERVICES[manufacter.type](manufacter, **kwargs)

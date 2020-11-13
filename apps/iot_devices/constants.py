@@ -12,6 +12,9 @@ MODEL_TYPE_CHOICES = (
     (MODEL_TYPE_RELAYS, _('Controladora Relays')),
 )
 
+# Gateways
+GATEWAY_MQTT = "MQTT"
+
 # Supported cloud services
 CLOUD_SERVICES_HIBRIS = 'HIBRIS'
 CLOUD_SERVICES_GOOGLE = 'GOOGLE'

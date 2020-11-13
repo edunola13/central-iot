@@ -15,10 +15,10 @@ DEVICE_TYPE_CHOICES = (
     (TYPE_ACTUATOR, _('Dispositivo de Actuadores')),
 )
 
-STATUS_INITIAL = 'INI'
-STATUS_OK = 'OK'
-STATUS_ERROR = 'ERROR'
-STATUS_DISCONNECT = 'DISCO'
+STATUS_INITIAL = 'INI'  # Se crea el device y espera una respuesta de tipo SYNC
+STATUS_OK = 'OK'  # Se recibe la respuesta de tipo SYNC
+STATUS_ERROR = 'ERROR'  # Se recibe la respuesta de tipo SYNC pero falla
+STATUS_DISCONNECT = 'DISCO'  # A definir...
 DEVICE_STATUS_CHOICES = (
     (STATUS_INITIAL, _('Configurando')),
     (STATUS_OK, _('Correcto')),
