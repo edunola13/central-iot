@@ -71,7 +71,7 @@ INSTALLED_APPS = [
     'apps.devices',
     'apps.components',
 
-    'apps.iot_devices',
+    'iot_devices',
 ]
 
 MIDDLEWARE = [

@@ -4,8 +4,8 @@ from __future__ import unicode_literals
 from django.db import models, transaction
 from django.contrib.auth import get_user_model
 
-from apps.iot_devices.proto.devices_pb2 import Payload, Trait
-from apps.iot_devices.proto.wrapper import PayloadWrapper
+from iot_devices.proto.devices_pb2 import Payload, Trait
+from iot_devices.proto.wrapper import PayloadWrapper
 
 from .constants import (
     TYPE_OTHER, COMPONENT_TYPE_CHOICES,

@@ -16,17 +16,17 @@ _sym_db = _symbol_database.Default()
 
 DESCRIPTOR = _descriptor.FileDescriptor(
   name='devices.proto',
-  package='apps.iot_devices',
+  package='iot_devices',
   syntax='proto3',
   serialized_options=None,
-  serialized_pb=_b('\n\rdevices.proto\x12\x10\x61pps.iot_devices\"\x93\x01\n\x05Trait\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0c\n\x04type\x18\x02 \x01(\t\x12\x0c\n\x04name\x18\x03 \x01(\t\x12\x33\n\x06values\x18\x04 \x03(\x0b\x32#.apps.iot_devices.Trait.ValuesEntry\x1a-\n\x0bValuesEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"\xf0\x01\n\x06\x44\x65vice\x12\x11\n\tdevice_id\x18\x01 \x01(\t\x12\x0c\n\x04type\x18\x02 \x01(\t\x12\x0c\n\x04name\x18\x03 \x01(\t\x12\x34\n\x06values\x18\x04 \x03(\x0b\x32$.apps.iot_devices.Device.ValuesEntry\x12\'\n\x06traits\x18\x05 \x03(\x0b\x32\x17.apps.iot_devices.Trait\x12)\n\x07\x64\x65vices\x18\x06 \x03(\x0b\x32\x18.apps.iot_devices.Device\x1a-\n\x0bValuesEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"\xf7\x02\n\x07Payload\x12\x33\n\x04type\x18\x01 \x01(\x0e\x32%.apps.iot_devices.Payload.PayloadType\x12:\n\x08sub_type\x18\x02 \x01(\x0e\x32(.apps.iot_devices.Payload.PayloadSubType\x12(\n\x06\x64\x65vice\x18\x04 \x01(\x0b\x32\x18.apps.iot_devices.Device\x12\'\n\x06traits\x18\x05 \x03(\x0b\x32\x17.apps.iot_devices.Trait\"F\n\x0bPayloadType\x12\x15\n\x11PAYLOAD_TYPE_NONE\x10\x00\x12\x08\n\x04SYNC\x10\x01\x12\x0b\n\x07\x45XECUTE\x10\x02\x12\t\n\x05STATE\x10\x03\"`\n\x0ePayloadSubType\x12\x19\n\x15PAYLOAD_SUB_TYPE_NONE\x10\x00\x12\x10\n\x0cSTATE_NOTIFY\x10\x01\x12\x10\n\x0cSTATE_REPORT\x10\x02\x12\x0f\n\x0bSTATE_ALERT\x10\x03\x62\x06proto3')
+  serialized_pb=_b('\n\rdevices.proto\x12\x0biot_devices\"\x8e\x01\n\x05Trait\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0c\n\x04type\x18\x02 \x01(\t\x12\x0c\n\x04name\x18\x03 \x01(\t\x12.\n\x06values\x18\x04 \x03(\x0b\x32\x1e.iot_devices.Trait.ValuesEntry\x1a-\n\x0bValuesEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"\xe1\x01\n\x06\x44\x65vice\x12\x11\n\tdevice_id\x18\x01 \x01(\t\x12\x0c\n\x04type\x18\x02 \x01(\t\x12\x0c\n\x04name\x18\x03 \x01(\t\x12/\n\x06values\x18\x04 \x03(\x0b\x32\x1f.iot_devices.Device.ValuesEntry\x12\"\n\x06traits\x18\x05 \x03(\x0b\x32\x12.iot_devices.Trait\x12$\n\x07\x64\x65vices\x18\x06 \x03(\x0b\x32\x13.iot_devices.Device\x1a-\n\x0bValuesEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"\xe3\x02\n\x07Payload\x12.\n\x04type\x18\x01 \x01(\x0e\x32 .iot_devices.Payload.PayloadType\x12\x35\n\x08sub_type\x18\x02 \x01(\x0e\x32#.iot_devices.Payload.PayloadSubType\x12#\n\x06\x64\x65vice\x18\x04 \x01(\x0b\x32\x13.iot_devices.Device\x12\"\n\x06traits\x18\x05 \x03(\x0b\x32\x12.iot_devices.Trait\"F\n\x0bPayloadType\x12\x15\n\x11PAYLOAD_TYPE_NONE\x10\x00\x12\x08\n\x04SYNC\x10\x01\x12\x0b\n\x07\x45XECUTE\x10\x02\x12\t\n\x05STATE\x10\x03\"`\n\x0ePayloadSubType\x12\x19\n\x15PAYLOAD_SUB_TYPE_NONE\x10\x00\x12\x10\n\x0cSTATE_NOTIFY\x10\x01\x12\x10\n\x0cSTATE_REPORT\x10\x02\x12\x0f\n\x0bSTATE_ALERT\x10\x03\x62\x06proto3')
 )
 
 
 
 _PAYLOAD_PAYLOADTYPE = _descriptor.EnumDescriptor(
   name='PayloadType',
-  full_name='apps.iot_devices.Payload.PayloadType',
+  full_name='iot_devices.Payload.PayloadType',
   filename=None,
   file=DESCRIPTOR,
   values=[
@@ -49,14 +49,14 @@ _PAYLOAD_PAYLOADTYPE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=636,
-  serialized_end=706,
+  serialized_start=591,
+  serialized_end=661,
 )
 _sym_db.RegisterEnumDescriptor(_PAYLOAD_PAYLOADTYPE)
 
 _PAYLOAD_PAYLOADSUBTYPE = _descriptor.EnumDescriptor(
   name='PayloadSubType',
-  full_name='apps.iot_devices.Payload.PayloadSubType',
+  full_name='iot_devices.Payload.PayloadSubType',
   filename=None,
   file=DESCRIPTOR,
   values=[
@@ -79,28 +79,28 @@ _PAYLOAD_PAYLOADSUBTYPE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=708,
-  serialized_end=804,
+  serialized_start=663,
+  serialized_end=759,
 )
 _sym_db.RegisterEnumDescriptor(_PAYLOAD_PAYLOADSUBTYPE)
 
 
 _TRAIT_VALUESENTRY = _descriptor.Descriptor(
   name='ValuesEntry',
-  full_name='apps.iot_devices.Trait.ValuesEntry',
+  full_name='iot_devices.Trait.ValuesEntry',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='key', full_name='apps.iot_devices.Trait.ValuesEntry.key', index=0,
+      name='key', full_name='iot_devices.Trait.ValuesEntry.key', index=0,
       number=1, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='value', full_name='apps.iot_devices.Trait.ValuesEntry.value', index=1,
+      name='value', full_name='iot_devices.Trait.ValuesEntry.value', index=1,
       number=2, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
@@ -118,40 +118,40 @@ _TRAIT_VALUESENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=138,
-  serialized_end=183,
+  serialized_start=128,
+  serialized_end=173,
 )
 
 _TRAIT = _descriptor.Descriptor(
   name='Trait',
-  full_name='apps.iot_devices.Trait',
+  full_name='iot_devices.Trait',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='id', full_name='apps.iot_devices.Trait.id', index=0,
+      name='id', full_name='iot_devices.Trait.id', index=0,
       number=1, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='type', full_name='apps.iot_devices.Trait.type', index=1,
+      name='type', full_name='iot_devices.Trait.type', index=1,
       number=2, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='name', full_name='apps.iot_devices.Trait.name', index=2,
+      name='name', full_name='iot_devices.Trait.name', index=2,
       number=3, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='values', full_name='apps.iot_devices.Trait.values', index=3,
+      name='values', full_name='iot_devices.Trait.values', index=3,
       number=4, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
@@ -169,27 +169,27 @@ _TRAIT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=36,
-  serialized_end=183,
+  serialized_start=31,
+  serialized_end=173,
 )
 
 
 _DEVICE_VALUESENTRY = _descriptor.Descriptor(
   name='ValuesEntry',
-  full_name='apps.iot_devices.Device.ValuesEntry',
+  full_name='iot_devices.Device.ValuesEntry',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='key', full_name='apps.iot_devices.Device.ValuesEntry.key', index=0,
+      name='key', full_name='iot_devices.Device.ValuesEntry.key', index=0,
       number=1, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='value', full_name='apps.iot_devices.Device.ValuesEntry.value', index=1,
+      name='value', full_name='iot_devices.Device.ValuesEntry.value', index=1,
       number=2, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
@@ -207,54 +207,54 @@ _DEVICE_VALUESENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=138,
-  serialized_end=183,
+  serialized_start=128,
+  serialized_end=173,
 )
 
 _DEVICE = _descriptor.Descriptor(
   name='Device',
-  full_name='apps.iot_devices.Device',
+  full_name='iot_devices.Device',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='device_id', full_name='apps.iot_devices.Device.device_id', index=0,
+      name='device_id', full_name='iot_devices.Device.device_id', index=0,
       number=1, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='type', full_name='apps.iot_devices.Device.type', index=1,
+      name='type', full_name='iot_devices.Device.type', index=1,
       number=2, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='name', full_name='apps.iot_devices.Device.name', index=2,
+      name='name', full_name='iot_devices.Device.name', index=2,
       number=3, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='values', full_name='apps.iot_devices.Device.values', index=3,
+      name='values', full_name='iot_devices.Device.values', index=3,
       number=4, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='traits', full_name='apps.iot_devices.Device.traits', index=4,
+      name='traits', full_name='iot_devices.Device.traits', index=4,
       number=5, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='devices', full_name='apps.iot_devices.Device.devices', index=5,
+      name='devices', full_name='iot_devices.Device.devices', index=5,
       number=6, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
@@ -272,41 +272,41 @@ _DEVICE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=186,
-  serialized_end=426,
+  serialized_start=176,
+  serialized_end=401,
 )
 
 
 _PAYLOAD = _descriptor.Descriptor(
   name='Payload',
-  full_name='apps.iot_devices.Payload',
+  full_name='iot_devices.Payload',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='type', full_name='apps.iot_devices.Payload.type', index=0,
+      name='type', full_name='iot_devices.Payload.type', index=0,
       number=1, type=14, cpp_type=8, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='sub_type', full_name='apps.iot_devices.Payload.sub_type', index=1,
+      name='sub_type', full_name='iot_devices.Payload.sub_type', index=1,
       number=2, type=14, cpp_type=8, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='device', full_name='apps.iot_devices.Payload.device', index=2,
+      name='device', full_name='iot_devices.Payload.device', index=2,
       number=4, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='traits', full_name='apps.iot_devices.Payload.traits', index=3,
+      name='traits', full_name='iot_devices.Payload.traits', index=3,
       number=5, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
@@ -326,8 +326,8 @@ _PAYLOAD = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=429,
-  serialized_end=804,
+  serialized_start=404,
+  serialized_end=759,
 )
 
 _TRAIT_VALUESENTRY.containing_type = _TRAIT
@@ -352,12 +352,12 @@ Trait = _reflection.GeneratedProtocolMessageType('Trait', (_message.Message,), d
   ValuesEntry = _reflection.GeneratedProtocolMessageType('ValuesEntry', (_message.Message,), dict(
     DESCRIPTOR = _TRAIT_VALUESENTRY,
     __module__ = 'devices_pb2'
-    # @@protoc_insertion_point(class_scope:apps.iot_devices.Trait.ValuesEntry)
+    # @@protoc_insertion_point(class_scope:iot_devices.Trait.ValuesEntry)
     ))
   ,
   DESCRIPTOR = _TRAIT,
   __module__ = 'devices_pb2'
-  # @@protoc_insertion_point(class_scope:apps.iot_devices.Trait)
+  # @@protoc_insertion_point(class_scope:iot_devices.Trait)
   ))
 _sym_db.RegisterMessage(Trait)
 _sym_db.RegisterMessage(Trait.ValuesEntry)
@@ -367,12 +367,12 @@ Device = _reflection.GeneratedProtocolMessageType('Device', (_message.Message,),
   ValuesEntry = _reflection.GeneratedProtocolMessageType('ValuesEntry', (_message.Message,), dict(
     DESCRIPTOR = _DEVICE_VALUESENTRY,
     __module__ = 'devices_pb2'
-    # @@protoc_insertion_point(class_scope:apps.iot_devices.Device.ValuesEntry)
+    # @@protoc_insertion_point(class_scope:iot_devices.Device.ValuesEntry)
     ))
   ,
   DESCRIPTOR = _DEVICE,
   __module__ = 'devices_pb2'
-  # @@protoc_insertion_point(class_scope:apps.iot_devices.Device)
+  # @@protoc_insertion_point(class_scope:iot_devices.Device)
   ))
 _sym_db.RegisterMessage(Device)
 _sym_db.RegisterMessage(Device.ValuesEntry)
@@ -380,7 +380,7 @@ _sym_db.RegisterMessage(Device.ValuesEntry)
 Payload = _reflection.GeneratedProtocolMessageType('Payload', (_message.Message,), dict(
   DESCRIPTOR = _PAYLOAD,
   __module__ = 'devices_pb2'
-  # @@protoc_insertion_point(class_scope:apps.iot_devices.Payload)
+  # @@protoc_insertion_point(class_scope:iot_devices.Payload)
   ))
 _sym_db.RegisterMessage(Payload)
 

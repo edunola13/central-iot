@@ -8,14 +8,14 @@ from django.conf import settings
 from django.db import transaction
 
 from google.protobuf.json_format import Parse
-from apps.iot_devices.proto.devices_pb2 import (
+from iot_devices.proto.devices_pb2 import (
     Payload as PayloadProto,
     Device as DeviceProto
 )
 
 import apps.devices.constants as device_cons
 import apps.components.constants as component_cons
-from apps.iot_devices.constants import (
+from iot_devices.constants import (
     MODEL_TYPE_WEATHER_STATION, MODEL_TYPE_RELAYS
 )
 
@@ -24,9 +24,9 @@ from apps.devices.models import Device
 from apps.components.models import Component
 from apps.locations.models import UserLocation
 
-from apps.iot_devices.models_md import DeviceInfo
+from iot_devices.models_md import DeviceInfo
 
-from apps.iot_devices.gateways.proxy import GatewayProxyService
+from iot_devices.gateways.proxy import GatewayProxyService
 from apps.manufacters.interfaces.internal.events import receive_signal
 
 

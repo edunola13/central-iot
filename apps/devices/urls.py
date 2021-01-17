@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from django.conf.urls import url, include
+from django.conf.urls import include
+from django.urls import path
 from rest_framework.routers import DefaultRouter
 
 from apps.devices.api import (
@@ -12,16 +13,16 @@ from apps.devices.api import (
 )
 
 router = DefaultRouter()
-router.register(r'devices', DeviceViewSet, basename='devices')
-router.register(r'devices/(?P<device_pk>[0-9a-f-]+)/attributes',
+router.register('devices', DeviceViewSet, basename='devices')
+router.register(r'devices/(?P<device_pk>\d+)/attributes',
                 DeviceAttributeViewSet, basename='devices-attrs')
-router.register(r'devices/(?P<device_pk>[0-9a-f-]+)/events-state',
-                EventStateViewSet, basename='components-events-state')
-router.register(r'devices/(?P<device_pk>[0-9a-f-]+)/events-action',
-                EventActionViewSet, basename='components-events-action')
+router.register(r'devices/(?P<device_pk>\d+)/events-state',
+                EventStateViewSet, basename='devices-events-state')
+router.register(r'devices/(?P<device_pk>\d+)/events-action',
+                EventActionViewSet, basename='devices-events-action')
 
 urlpatterns = [
-    url(r'^devices/(?P<device_pk>[0-9a-f-]+)/components/',
+    path('devices/<int:device_pk>/components/',
         include(('apps.devices.components.urls', 'components'), namespace='devices')),
 ]
 

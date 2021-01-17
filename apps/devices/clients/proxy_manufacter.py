@@ -3,12 +3,12 @@ from __future__ import unicode_literals
 
 from apps.manufacters.interfaces.factories import ManufacterFactoryService
 
-from apps.iot_devices.proto.devices_pb2 import (
+from iot_devices.proto.devices_pb2 import (
     Payload as PayloadProto,
     Device as DeviceProto,
     Trait as TraitProto
 )
-from apps.iot_devices.proto.wrapper import PayloadWrapper
+from iot_devices.proto.wrapper import PayloadWrapper
 
 
 class ProxyManufacter(object):

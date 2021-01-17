@@ -11,7 +11,7 @@ from .api import (
 
 router = DefaultRouter()
 
-router.register(r'', ComponentViewSet, basename='components')
+router.register('', ComponentViewSet, basename='components')
 
 urlpatterns = []
 

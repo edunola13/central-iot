@@ -56,21 +56,21 @@ class InfoApi(APIView):
 
 
 urlpatterns = [
-    url(r'^$', InfoApi.as_view(), name='info'),
+    path('', InfoApi.as_view(), name='info'),
 
-    url(r'^api/$', InfoApi.as_view(), name='info_api'),
-    url(r'^api/u/', include('django_module_users.urls')),
-    url(r'^api/attr/', include('django_module_attr.urls')),
-    url(r'^api/m/', include('apps.manufacters.urls')),
-    url(r'^api/l/', include('apps.locations.urls')),
-    url(r'^api/d/', include('apps.devices.urls')),
-    url(r'^api/c/', include('apps.components.urls')),
+    path('api/', InfoApi.as_view(), name='info_api'),
+    path('api/u/', include('django_module_users.urls')),
+    path('api/attr/', include('django_module_attr.urls')),
+    path('api/m/', include('apps.manufacters.urls')),
+    path('api/l/', include('apps.locations.urls')),
+    path('api/d/', include('apps.devices.urls')),
+    path('api/c/', include('apps.components.urls')),
 
-    url(r'^api/iot/', include('apps.iot_devices.urls')),
+    path('api/iot/', include('iot_devices.urls')),
 
-    url(r'^api/o/token/$', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    url(r'^api/o/token/refresh/$', TokenRefreshView.as_view(), name='token_refresh'),
-    url(r'^api/o/token/verify/$', TokenVerifyView.as_view(), name='token_verify'),
+    path('api/o/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/o/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('api/o/token/verify/', TokenVerifyView.as_view(), name='token_verify'),
 ]
 if settings.DEBUG:
     urlpatterns += [

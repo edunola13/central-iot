@@ -24,17 +24,17 @@ from .serializers import (
 class AdminManufacterViewSet(ModelViewSet):
     queryset = Manufacter.objects.all()
     serializer_class = AdminManufacterSerializer
-    permission_classes = []
+    permission_classes = (AdminManufacters | AdminSpecificManufacterDetail,)
 
     filter_fields = ('type', 'enabled')
     search_fields = ('name', 'uuid')
     ordering_fields = ('name', 'created_at')
     ordering = 'name'
 
-    def get_permissions(self):
-        if self.detail:
-            self.permission_classes = []
-        return super(AdminManufacterViewSet, self).get_permissions()
+    # def get_permissions(self):
+    #     if self.detail:
+    #         self.permission_classes = []
+    #     return super(AdminManufacterViewSet, self).get_permissions()
 
     def create(self, request, *args, **kwargs):
         serializer = ManufacterCreateSerializer(data=request.data)

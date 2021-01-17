@@ -3,8 +3,8 @@ from __future__ import unicode_literals
 
 from apps.manufacters.interfaces.interfaces import ManufacterInterfaceService
 
-from apps.iot_devices.proto.devices_pb2 import Payload
-from apps.iot_devices.proto.wrapper import PayloadWrapper
+from iot_devices.proto.devices_pb2 import Payload
+from iot_devices.proto.wrapper import PayloadWrapper
 
 from apps.devices.constants import QUERY_SYNC, QUERY_STATE
 

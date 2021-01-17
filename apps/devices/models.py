@@ -6,8 +6,8 @@ from django.db import models, transaction
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ObjectDoesNotExist
 
-from apps.iot_devices.proto.devices_pb2 import Payload
-from apps.iot_devices.proto.wrapper import PayloadWrapper
+from iot_devices.proto.devices_pb2 import Payload
+from iot_devices.proto.wrapper import PayloadWrapper
 
 from .constants import (
     TYPE_OTHER, DEVICE_TYPE_CHOICES,

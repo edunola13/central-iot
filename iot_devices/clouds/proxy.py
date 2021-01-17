@@ -6,7 +6,7 @@ import uuid
 
 from google.protobuf.json_format import Parse
 
-from apps.iot_devices.proto.devices_pb2 import Payload
+from iot_devices.proto.devices_pb2 import Payload
 
 from .hibris.base import HibrisService
 

@@ -46,7 +46,7 @@ class MQTTInterfaceService():
             topic (str): Topico donde viene el "device_id" y "method"
             payload (dict): Payload recibido
         """
-        from apps.iot_devices.clouds.proxy import ProxyClouds
+        from iot_devices.clouds.proxy import ProxyClouds
 
         topic_splitted = topic.split("/")
         if len(topic_splitted) < 3:

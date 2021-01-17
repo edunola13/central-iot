@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from django.conf.urls import url
+from django.urls import path
 
 from .api import (
     RegisterDeviceView,
@@ -9,5 +9,5 @@ from .api import (
 
 
 urlpatterns = [
-    url(r'^devices/$', RegisterDeviceView.as_view(), name='register'),
+    path('devices/', RegisterDeviceView.as_view(), name='register'),
 ]

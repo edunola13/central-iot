@@ -14,7 +14,8 @@ class DeviceService(object):
 
     La idea es ver si aca hacemos el punto intermedio que registra los devices y otras cosas.
 
-    POR AHORA NO LO VEO DEL TODO REQUERIDO
+    POR AHORA NO LO VEO DEL TODO REQUERIDO, es muy simple el alta por lo que no la complicaria.
+    Ademas ya estan los metodos create de Device y Component que obligan a respetar eso.
     """
 
     # def create(self, device_data: dict, components_data = [], attrs_data = []):

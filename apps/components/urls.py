@@ -10,10 +10,10 @@ from .api import (
 )
 
 router = DefaultRouter()
-router.register(r'components', ComponentViewSet, basename='components')
-router.register(r'components/(?P<com_pk>[0-9a-f-]+)/events-state',
+router.register('components', ComponentViewSet, basename='components')
+router.register(r'components/(?P<com_pk>\d+)/events-state',
                 EventStateViewSet, basename='components-events-state')
-router.register(r'components/(?P<com_pk>[0-9a-f-]+)/events-action',
+router.register(r'components/(?P<com_pk>\d+)/events-action',
                 EventActionViewSet, basename='components-events-action')
 
 urlpatterns = router.urls

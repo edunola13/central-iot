@@ -6,9 +6,9 @@ from django.conf import settings
 
 from google.protobuf.json_format import MessageToJson
 
-from apps.iot_devices.proto.devices_pb2 import Payload
+from iot_devices.proto.devices_pb2 import Payload
 
-from apps.iot_devices.models_md import DeviceInfo
+from iot_devices.models_md import DeviceInfo
 
 from .mqtt.interface import MQTTInterfaceService
 
@@ -21,8 +21,8 @@ INTERFACES = {
 class GatewayProxyService():
     """Gateway Interface."""
 
-    @classmethod
-    def get_interface(cls, gateway: str) -> any:
+    @staticmethod
+    def get_gateway(gateway: str) -> any:
         """Return the rigth gateway."""
         return INTERFACES[gateway]
 
@@ -39,7 +39,7 @@ class GatewayProxyService():
         payload_dict = json.loads(MessageToJson(
             payload, use_integers_for_enums=True
         ))
-        cls.get_interface(device.gateway).send(
+        cls.get_gateway(device.gateway).send(
             device.device_id,
             payload_dict
         )

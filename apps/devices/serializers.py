@@ -111,7 +111,7 @@ class DeviceActionSerializer(serializers.Serializer):
         serializers = {
             # SPECIFIC FOR TYPE
         }
-        klass = serializers.get(order_type, None)
+        klass = serializers.get(order_type, DeviceActionOtherSerializer)
         if klass:
             return klass
         return klass

@@ -5,11 +5,10 @@ import uuid
 
 from django.dispatch import receiver
 
-from apps.iot_devices.gateways.proxy import GatewayProxyService
+from iot_devices.gateways.proxy import GatewayProxyService
+from iot_devices.models_md import DeviceInfo
 
 from apps.manufacters.interfaces.internal.events import send_signal
-
-from apps.iot_devices.models_md import DeviceInfo
 
 
 #
